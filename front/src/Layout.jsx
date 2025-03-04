@@ -6,7 +6,6 @@ import { Login } from "../src/pages/Login";
 import { Register } from "../src/pages/Register";
 import { Profile } from "../src/pages/Profile";
 import { SearchEvent } from "../src/pages/SearchEvent";
-import "bootstrap/dist/css/bootstrap.min.css";
 
 export const Layout = () => {
   return (
