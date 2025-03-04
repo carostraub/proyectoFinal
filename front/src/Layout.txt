@@ -18,10 +18,10 @@ export const Layout = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
 
-        <Route path="/" element={<Home />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/searchevent" element={<SearchEvent />} />
-        <Route path="/createevent" element={<CreateEvent />} />
+        <Route path="/" element={<PrivateRoute><Home /></PrivateRoute>} />
+        <Route path="/profile" element={<PrivateRoute><Profile /></PrivateRoute>} />
+        <Route path="/searchevent" element={<PrivateRoute><SearchEvent /></PrivateRoute>} />
+        <Route path="/createevent" element={<PrivateRoute><CreateEvent /></PrivateRoute>} />
       </Routes>
     </AuthProvider>
   );
