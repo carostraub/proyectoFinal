@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 
 export const Home = () => {
   const cardStyle = {
@@ -22,9 +23,11 @@ export const Home = () => {
                 Pues aqui tienes tu solucion!
               </p>
               <div>
+                <Link to="/createsport">
               <button className="btn btn-outline-secondary w-50">
                 Crear evento
               </button>
+              </Link>
               </div>
             </div>
           </div>
