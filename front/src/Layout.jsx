@@ -10,18 +10,18 @@ import { CreateEvent } from "./pages/CreateEvent";
 import NavBar from "./components/NavBar";
 import PrivateRoute from "./pages/PrivateRoute";
 
+
 export const Layout = () => {
   return (
     <AuthProvider>
       <NavBar />
       <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/createevent" element={<CreateEvent />} />
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
-
-        <Route path="/" element={<Home />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/searchevent" element={<SearchEvent />} />
-        <Route path="/createevent" element={<CreateEvent />} />
+        <Route path="search" element={<SearchEvent />} />
       </Routes>
     </AuthProvider>
   );
