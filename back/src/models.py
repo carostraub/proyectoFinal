@@ -17,7 +17,9 @@ class User(db.Model):
     edad = db.Column(db.Integer, nullable=False)
     sexo = db.Column(db.String, nullable=False)
     genero = db.Column(db.String, nullable=False)
+    biography = db.Column(db.String, default="")
     profilePicture = db.Column(db.String, default="uploads/default.png", nullable=False)
+    
     
     def serialize(self):
         return {
@@ -28,6 +30,7 @@ class User(db.Model):
             "edad": self.edad,
             "sexo":self.sexo,
             "genero": self.genero,
+            "biography": self.biography,
             "profile": self.profile.serialize()
         }
     def save(self):
@@ -48,7 +51,7 @@ class User(db.Model):
         return check_password_hash(self.password,  password)
     
     
-class Participante:
+class Participante(db.Model):
     __tablename__ = 'participantes'
     
     id_evento= db.Column(db.Integer, primary_key=True)
@@ -67,7 +70,7 @@ class Participante:
         db.session.commit()
         
         
-class Evento:
+class Evento(db.Model):
     __tablename__ = 'eventos'
     id= db.Column(db.Integer, primary_key=True)
     organizador= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
@@ -83,31 +86,6 @@ class Evento:
             "fecha_hora": self.fecha_hora,
             "dinero": self.dinero
         }
-    def save(self):
-        db.session.add(self)
-        db.session.commit()
-
-    def update(self):
-        db.session.commit()
-
-    def delete(self):
-        db.session.delete(self)
-        db.session.commit()
-    
-class Profile(db.Model):
-    __tablename__ = 'profiles'
-
-    id = db.Column(db.Integer, primary_key=True)
-    biography = db.Column(db.String, default="")
-    picture = db.Column(db.Integer, db.ForeignKey('user.profilePicture'), nullable=False)
-    
-    def serialize(self):
-        return {
-            
-            "biography": self.biography,
-            "picture":self.picture
-        }
-    
     def save(self):
         db.session.add(self)
         db.session.commit()
