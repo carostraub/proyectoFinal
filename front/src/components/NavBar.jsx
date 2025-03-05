@@ -27,7 +27,7 @@ const NavBar = () => {
               <Link className="nav-link active" to="/">Home</Link>
             </li>
             <li className="nav-item">
-              <Link className="nav-link" to="/createevent">Crear evento</Link>
+              <Link className="nav-link" to="/">Crear evento</Link>
             </li>
             <li className="nav-item dropdown">
               <a
