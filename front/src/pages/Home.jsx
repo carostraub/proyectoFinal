@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 export const Home = () => {
   const cardStyle = {
     width: "26rem",
-    height: "16rem"
+    height: "19rem"
   };
 
   return (
@@ -22,13 +22,22 @@ export const Home = () => {
               <p className="card-text">
                 Pues aqui tienes tu solucion!
               </p>
+              <div className="mt-5">
               <div>
+              <button className="btn btn-outline-secondary w-75">
+                Buscar evento
+              </button>
+              </div>
                 <Link to="/createsport">
-              <button className="btn btn-outline-secondary w-50">
+              <button className="btn btn-outline-secondary w-75">
                 Crear evento
               </button>
               </Link>
               </div>
+
+              
+
+
             </div>
           </div>
         </div>
@@ -43,8 +52,13 @@ export const Home = () => {
               <p className="card-text">
                 Pues aqui puedes buscar un acompañante para tu viaje!
               </p>
+              <div className="p-3">
               <div>
-              <button className="btn btn-outline-secondary w-50">
+              <button className="btn btn-outline-secondary w-75">
+                Buscar evento
+              </button>
+              </div>
+              <button className="btn btn-outline-secondary w-75">
                 Crear evento
               </button>
               </div>
@@ -61,8 +75,13 @@ export const Home = () => {
               <p className="card-text">
                 Some quick example text to build on the card title and make up the bulk of the card's content.
               </p>
+              <div className="mt-5">
               <div>
-              <button className="btn btn-outline-secondary w-50">
+              <button className="btn btn-outline-secondary w-75">
+                Buscar evento
+              </button>
+              </div>
+              <button className="btn btn-outline-secondary w-75">
                 Crear evento
               </button>
               </div>
@@ -84,8 +103,13 @@ export const Home = () => {
               <p className="card-text">
                 Pues crea tu propio evento aqui!
               </p>
+              <div className="p-3">
               <div>
-              <button className="btn btn-outline-secondary w-50">
+              <button className="btn btn-outline-secondary w-75">
+                Buscar evento
+              </button>
+              </div>
+              <button className="btn btn-outline-secondary w-75">
                 Crear evento
               </button>
               </div>
