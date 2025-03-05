@@ -23,19 +23,21 @@ export const Home = () => {
                 Pues aqui tienes tu solucion!
               </p>
               <div className="mt-5">
-              <div>
-              <button className="btn btn-outline-secondary w-75">
-                Buscar evento
-              </button>
-              </div>
+                <div>
+                <Link to="/search">
+                  <button className="btn btn-outline-secondary w-75">
+                    Buscar evento
+                  </button>
+                  </Link>
+                </div>
                 <Link to="/createsport">
-              <button className="btn btn-outline-secondary w-75">
-                Crear evento
-              </button>
-              </Link>
+                  <button className="btn btn-outline-secondary w-75">
+                    Crear evento
+                  </button>
+                </Link>
               </div>
 
-              
+
 
 
             </div>
@@ -53,14 +55,16 @@ export const Home = () => {
                 Pues aqui puedes buscar un acompañante para tu viaje!
               </p>
               <div className="p-3">
-              <div>
-              <button className="btn btn-outline-secondary w-75">
-                Buscar evento
-              </button>
-              </div>
-              <button className="btn btn-outline-secondary w-75">
-                Crear evento
-              </button>
+                <div>
+                  <button className="btn btn-outline-secondary w-75">
+                    Buscar evento
+                  </button>
+                </div>
+                <Link to="/createsecurity">
+                  <button className="btn btn-outline-secondary w-75">
+                    Crear evento
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -76,14 +80,16 @@ export const Home = () => {
                 Some quick example text to build on the card title and make up the bulk of the card's content.
               </p>
               <div className="mt-5">
-              <div>
-              <button className="btn btn-outline-secondary w-75">
-                Buscar evento
-              </button>
-              </div>
-              <button className="btn btn-outline-secondary w-75">
-                Crear evento
-              </button>
+                <div>
+                  <button className="btn btn-outline-secondary w-75">
+                    Buscar evento
+                  </button>
+                </div>
+                <Link to="/createevent">
+                  <button className="btn btn-outline-secondary w-75">
+                    Crear evento
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
@@ -104,14 +110,16 @@ export const Home = () => {
                 Pues crea tu propio evento aqui!
               </p>
               <div className="p-3">
-              <div>
-              <button className="btn btn-outline-secondary w-75">
-                Buscar evento
-              </button>
-              </div>
-              <button className="btn btn-outline-secondary w-75">
-                Crear evento
-              </button>
+                <div>
+                  <button className="btn btn-outline-secondary w-75">
+                    Buscar evento
+                  </button>
+                </div>
+                <Link to="/createother">
+                  <button className="btn btn-outline-secondary w-75">
+                    Crear evento
+                  </button>
+                </Link>
               </div>
             </div>
           </div>
