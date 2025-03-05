@@ -4,13 +4,13 @@ import { AuthProvider } from "../src/context/AuthContext";
 import { Home } from "../src/pages/Home";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
-import Profile  from "./pages/Profile";
+import Profile from "./pages/Profile";
 import { SearchEvent } from "./pages/SearchEvent";
 import { CreateEvent } from "./pages/CreateEvent";
 import NavBar from "./components/NavBar";
 import PrivateRoute from "./pages/PrivateRoute";
-import { CrearDeporte } from "./pages/Eventos/CrearDeporte";
-
+import { CreateSport } from "./pages/Eventos/CreateSport";
+import { MyEvent } from "./pages/Eventos/MyEvent";
 
 export const Layout = () => {
   return (
@@ -23,7 +23,8 @@ export const Layout = () => {
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="search" element={<SearchEvent />} />
-        <Route path="createsport" element={<CrearDeporte />} />
+        <Route path="createsport" element={<CreateSport />} />
+        <Route path="myevent" element={<MyEvent />} />
       </Routes>
     </AuthProvider>
   );
