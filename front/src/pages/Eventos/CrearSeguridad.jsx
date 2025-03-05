@@ -1,22 +1,22 @@
 import React from "react";
 
-export const CrearDeporte = () => {
+export const CrearSeguridad = () => {
   return (
     <div className="container text-center">
-      <h1>Deporte</h1>
+      <h1>Seguridad</h1>
       <div className="row">
         <div className="col">
           <div className="mb-3">
-            <label htmlFor="deporte" className="form-label">Deporte</label>
+            <label htmlFor="deporte" className="form-label">Ubicacion salida</label>
             <input type="text" className="form-control" id="deporte" placeholder="...." />
-            <label htmlFor="ubicacion" className="form-label">Ubicación</label>
+            <label htmlFor="ubicacion" className="form-label">Ubicacion destino</label>
             <input type="text" className="form-control" id="ubicacion" placeholder="...." />
             <label htmlFor="deporte" className="form-label">Fecha</label>
             <input type="date" className="form-control" id="deporte" placeholder="...." />
             <label htmlFor="deporte" className="form-label">Horario</label>
             <input type="time" className="form-control" id="deporte" placeholder="...." />
 
-            <label htmlFor="personasFaltan" className="form-label">¿Cuántas personas faltan?</label>
+            <label htmlFor="personasFaltan" className="form-label">¿Cuántos acompañantes precisas?</label>
             <div className="d-flex justify-content-center">
               <input
                 type="number"
@@ -27,15 +27,7 @@ export const CrearDeporte = () => {
               />
             </div>
 
-            <div>¿Se requiere de pago?</div>
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" type="checkbox" id="PagoCheckbox1" value="option1" />
-              <label className="form-check-label" htmlFor="inlineCheckbox1">Sí</label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input className="form-check-input" type="checkbox" id="PagoCheckbox2" value="option2" />
-              <label className="form-check-label" htmlFor="inlineCheckbox2">No</label>
-            </div>
+
           </div>
         </div>
         <div className="col">

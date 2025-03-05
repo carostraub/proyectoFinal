@@ -1,13 +1,13 @@
 import React from "react";
 
-export const CrearDeporte = () => {
+export const CreateOther = () => {
   return (
     <div className="container text-center">
-      <h1>Deporte</h1>
+      <h1>Crea tu evento personalizado</h1>
       <div className="row">
         <div className="col">
           <div className="mb-3">
-            <label htmlFor="deporte" className="form-label">Deporte</label>
+            <label htmlFor="deporte" className="form-label">Tipo de Evento</label>
             <input type="text" className="form-control" id="deporte" placeholder="...." />
             <label htmlFor="ubicacion" className="form-label">Ubicación</label>
             <input type="text" className="form-control" id="ubicacion" placeholder="...." />
