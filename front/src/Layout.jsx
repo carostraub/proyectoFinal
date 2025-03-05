@@ -4,7 +4,7 @@ import { AuthProvider } from "../src/context/AuthContext";
 import { Home } from "../src/pages/Home";
 import { Login } from "./pages/Login";
 import Register from "./pages/Register";
-import Profile  from "./pages/Profile";
+import Profile from "./pages/Profile";
 import { SearchEvent } from "./pages/SearchEvent";
 import { CreateEvent } from "./pages/Eventos/CreateEvent";
 import NavBar from "./components/NavBar";
@@ -14,6 +14,8 @@ import { CrearSeguridad } from "./pages/Eventos/CrearSeguridad";
 import { CreateOther } from "./pages/Eventos/CrearOtro";
 import Buscar from "./pages/Eventos/Buscar";
 
+import { CreateSport } from "./pages/Eventos/CreateSport";
+import { MyEvent } from "./pages/Eventos/MyEvent";
 
 export const Layout = () => {
   return (
@@ -30,6 +32,8 @@ export const Layout = () => {
         <Route path="createsecurity" element={<CrearSeguridad />} />
         <Route path="createother" element={<CreateOther />} />
         
+        
+        <Route path="myevent" element={<MyEvent />} />
       </Routes>
     </AuthProvider>
   );
