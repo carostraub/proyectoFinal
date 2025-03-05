@@ -3,17 +3,19 @@ import React from "react";
 export const MyEvent = () => {
   return (
     <div class="card text-center">
-      <div class="card-header">Featured</div>
+      <div class="card-header">Mi evento</div>
       <div class="card-body">
-        <h5 class="card-title">Special title treatment</h5>
+        <h5 class="card-title">Partido Fútbol 6 x lado</h5>
         <p class="card-text">
-          With supporting text below as a natural lead-in to additional content.
+          <p>Detalles de tu evento de deporte:</p>
+          <p>Personas: 12</p>
+          <p>Cuota: 2500 clp</p>
+          <p>Lugar: Rancho Rossi, La Serena</p>
+          <p>Fecha: 12 de abril - Hora: 19:30</p>
         </p>
-        <a href="#" class="btn btn-primary">
-          Go somewhere
-        </a>
+        <a class="btn btn-secondary">Eliminar evento</a>
       </div>
-      <div class="card-footer text-body-secondary">2 days ago</div>
+      <div class="card-footer text-body-secondary">Creado hace 2 días</div>
     </div>
   );
 };
