@@ -74,6 +74,9 @@ class Evento(db.Model):
     ubicacion = db.Column(db.String, nullable=False)
     fecha_hora = db.Column(db.String, nullable=False)
     dinero = db.Column(db.String)
+    category=db.Column(db.Integer, nullable=False)
+    description=db.Column(db.String)
+
     
     participantes = relationship('User', secondary=participantes_table, back_populates="eventos_postulados")
 
@@ -85,6 +88,8 @@ class Evento(db.Model):
             "fecha_hora": self.fecha_hora,
             "dinero": self.dinero,
             "organizador": self.organizador.nombre,
+            "category":self.category,
+            "description":self.description,
             "participantes": [usuario.nombre for usuario in self.participantes]
         }
     def save(self):
