@@ -1,14 +1,14 @@
 import React from "react";
 
-const CreateEvent = () => {
+const CreateSport = () => {
   return (
     <div className="container text-center">
-      <h1>Evento</h1>
+      <h1>Deporte</h1>
       <div className="row">
         <div className="col">
           <div className="mb-3">
             <label htmlFor="deporte" className="form-label">
-              Tipo de Evento
+              Deporte
             </label>
             <input
               type="text"
@@ -190,4 +190,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default CreateSport;

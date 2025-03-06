@@ -1,14 +1,14 @@
 import React from "react";
 
-const CreateEvent = () => {
+const CreateSecurity = () => {
   return (
     <div className="container text-center">
-      <h1>Evento</h1>
+      <h1>Seguridad</h1>
       <div className="row">
         <div className="col">
           <div className="mb-3">
             <label htmlFor="deporte" className="form-label">
-              Tipo de Evento
+              Ubicacion salida
             </label>
             <input
               type="text"
@@ -17,7 +17,7 @@ const CreateEvent = () => {
               placeholder="...."
             />
             <label htmlFor="ubicacion" className="form-label">
-              Ubicación
+              Ubicacion destino
             </label>
             <input
               type="text"
@@ -45,7 +45,7 @@ const CreateEvent = () => {
             />
 
             <label htmlFor="personasFaltan" className="form-label">
-              ¿Cuántas personas faltan?
+              ¿Cuántos acompañantes precisas?
             </label>
             <div className="d-flex justify-content-center">
               <input
@@ -55,30 +55,6 @@ const CreateEvent = () => {
                 placeholder="...."
                 style={{ width: "5rem" }}
               />
-            </div>
-
-            <div>¿Se requiere de pago?</div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox1"
-                value="option1"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox1">
-                Sí
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox2"
-                value="option2"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox2">
-                No
-              </label>
             </div>
           </div>
         </div>
@@ -190,4 +166,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default CreateSecurity;
