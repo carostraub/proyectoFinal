@@ -1,6 +1,6 @@
 import React from "react";
 
-Login = () => {
+const Login = () => {
   return (
     <form className="container w-50 mt-1">
       <div className="mb-3">
