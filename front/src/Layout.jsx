@@ -8,11 +8,11 @@ import Profile from "./pages/Profile";
 import CreateEvent from "./pages/Eventos/CreateEvent";
 import NavBar from "./components/NavBar";
 import PrivateRoute from "./pages/PrivateRoute";
-import CrearDeporte from "./pages/Eventos/CrearDeporte";
-import CrearSeguridad from "./pages/Eventos/CrearSeguridad";
-import CreateOther from "./pages/Eventos/CrearOtro";
-import Buscar from "./pages/Eventos/Buscar";
+import CreateOther from "./pages/Eventos/CrearOther";
 import MyEvent from "./pages/Eventos/MyEvent";
+import CreateSecurity from "./pages/Eventos/CreateSecurity";
+import CreateSport from "./pages/Eventos/CreateSport";
+import Search from "./pages/Eventos/Search";
 
 export const Layout = () => {
   return (
@@ -24,12 +24,11 @@ export const Layout = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/login" element={<Login />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="search" element={<Buscar />} />
-        <Route path="createsport" element={<CrearDeporte />} />
-        <Route path="createsecurity" element={<CrearSeguridad />} />
-        <Route path="createother" element={<CreateOther />} />
-
-        <Route path="myevent" element={<MyEvent />} />
+        <Route path="/search" element={<Search />} />
+        <Route path="/createsport" element={<CreateSport />} />
+        <Route path="/createsecurity" element={<CreateSecurity />} />
+        <Route path="/createother" element={<CreateOther />} />
+        <Route path="/myevent" element={<MyEvent />} />
       </Routes>
     </AuthProvider>
   );

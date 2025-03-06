@@ -1,6 +1,6 @@
 import React from "react";
 
-export const MyEvent = () => {
+const MyEvent = () => {
   return (
     <div class="card text-center">
       <div class="card-header">Mi evento</div>
@@ -19,3 +19,5 @@ export const MyEvent = () => {
     </div>
   );
 };
+
+export default MyEvent;

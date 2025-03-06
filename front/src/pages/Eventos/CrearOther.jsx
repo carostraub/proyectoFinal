@@ -1,9 +1,9 @@
 import React from "react";
 
-const CreateEvent = () => {
+const CreateOther = () => {
   return (
     <div className="container text-center">
-      <h1>Evento</h1>
+      <h1>Crea tu evento personalizado</h1>
       <div className="row">
         <div className="col">
           <div className="mb-3">
@@ -190,4 +190,4 @@ const CreateEvent = () => {
   );
 };
 
-export default CreateEvent;
+export default CreateOther;

@@ -1,6 +1,6 @@
 import React from "react";
 
-export const CreateSport = () => {
+const CreateSport = () => {
   return (
     <div className="container text-center">
       <h1>Deporte</h1>
@@ -23,6 +23,24 @@ export const CreateSport = () => {
               type="text"
               className="form-control"
               id="ubicacion"
+              placeholder="...."
+            />
+            <label htmlFor="deporte" className="form-label">
+              Fecha
+            </label>
+            <input
+              type="date"
+              className="form-control"
+              id="deporte"
+              placeholder="...."
+            />
+            <label htmlFor="deporte" className="form-label">
+              Horario
+            </label>
+            <input
+              type="time"
+              className="form-control"
+              id="deporte"
               placeholder="...."
             />
 
@@ -76,7 +94,7 @@ export const CreateSport = () => {
               id="GeneroCheckbox1"
               value="option1"
             />
-            <label className="form-check-label" for="inlineCheckbox1">
+            <label className="form-check-label" htmlFor="inlineCheckbox1">
               Hombre
             </label>
           </div>
@@ -87,7 +105,7 @@ export const CreateSport = () => {
               id="GeneroCheckbox2"
               value="option2"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               Mujer
             </label>
           </div>
@@ -98,7 +116,7 @@ export const CreateSport = () => {
               id="GeneroCheckbox3"
               value="option3"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               No Binario
             </label>
           </div>
@@ -109,7 +127,7 @@ export const CreateSport = () => {
               id="GeneroCheckbox4"
               value="option4"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               Otro
             </label>
           </div>
@@ -120,7 +138,7 @@ export const CreateSport = () => {
               id="GeneroCheckbox5"
               value="option5"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               No importa
             </label>
           </div>
@@ -133,7 +151,7 @@ export const CreateSport = () => {
               id="SexoCheckbox1"
               value="option1"
             />
-            <label className="form-check-label" for="inlineCheckbox1">
+            <label className="form-check-label" htmlFor="inlineCheckbox1">
               Masculino
             </label>
           </div>
@@ -144,7 +162,7 @@ export const CreateSport = () => {
               id="SexoCheckbox2"
               value="option2"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               Femenino
             </label>
           </div>
@@ -155,16 +173,21 @@ export const CreateSport = () => {
               id="SexoCheckbox3"
               value="option3"
             />
-            <label className="form-check-label" for="inlineCheckbox2">
+            <label className="form-check-label" htmlFor="inlineCheckbox2">
               Mixto
             </label>
           </div>
           <h3 className="text-center mt-4">Rango de edad</h3>
 
-          <label for="customRange1" className="form-label"></label>
+          <label htmlFor="customRange1" className="form-label"></label>
           <input type="range" className="form-range" id="customRange1"></input>
         </div>
+      </div>
+      <div className="mt-5">
+        <button className="btn btn-outline-secondary w-50">Crear Evento</button>
       </div>
     </div>
   );
 };
+
+export default CreateSport;
