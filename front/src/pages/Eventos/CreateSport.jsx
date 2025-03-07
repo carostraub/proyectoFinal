@@ -34,60 +34,70 @@ const CreateSport = () => {
               id="ubicacion"
               placeholder="...."
             />
-            <label htmlFor="deporte" className="form-label">
-              Fecha
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              id="deporte"
-              placeholder="...."
-            />
-            <label htmlFor="deporte" className="form-label">
-              Horario
-            </label>
-            <input
-              type="time"
-              className="form-control"
-              id="deporte"
-              placeholder="...."
-            />
-
-            <label htmlFor="personasFaltan" className="form-label">
-              ¿Cuántas personas faltan?
-            </label>
-            <div className="d-flex justify-content-center">
-              <input
-                type="number"
-                className="form-control"
-                id="personasFaltan"
-                placeholder="...."
-                style={{ width: "5rem" }}
-              />
+            <div className="row">
+              <div className="col">
+                <label htmlFor="deporte" className="form-label">
+                  Fecha
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="deporte"
+                  placeholder="...."
+                />
+              </div>
+              <div className="col">
+                <label htmlFor="deporte" className="form-label">
+                  Horario
+                </label>
+                <input
+                  type="time"
+                  className="form-control"
+                  id="deporte"
+                  placeholder="...."
+                />
+              </div>
             </div>
-
-            <div>¿Se requiere de pago?</div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox1"
-                value="option1"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox1">
-                Sí
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox2"
-                value="option2"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox2">
-                No
-              </label>
+            <div className="row">
+              <div className="col">
+                <label htmlFor="personasFaltan" className="form-label">
+                  ¿Cuántas personas faltan?
+                </label>
+                <div className="d-flex justify-content-center">
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="personasFaltan"
+                    placeholder="...."
+                    style={{ width: "5rem" }}
+                  />
+                </div>
+              </div>
+              <div className="col">
+                <div>¿Se requiere de pago?</div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="PagoCheckbox1"
+                    value="option1"
+                  />
+                  <label className="form-check-label" htmlFor="inlineCheckbox1">
+                    Sí
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="checkbox"
+                    id="PagoCheckbox2"
+                    value="option2"
+                  />
+                  <label className="form-check-label" htmlFor="inlineCheckbox2">
+                    No
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -190,6 +200,14 @@ const CreateSport = () => {
 
           <label htmlFor="customRange1" className="form-label"></label>
           <input type="range" className="form-range" id="customRange1"></input>
+        </div>
+      </div>
+      <div className="row">
+        <div className="col">
+          <div className="form-floating">
+            <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }}></textarea>
+            <label htmlFor="floatingTextarea2">Descripcion del evento...</label>
+          </div>
         </div>
       </div>
       <div className="mt-5">
