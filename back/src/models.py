@@ -2,10 +2,22 @@ import os
 import sys
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, Column, Integer, String, Table
+from sqlalchemy import ForeignKey, Column, Integer, String, Table, Enum
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
+
+class estatus(Enum):
+    PARTICIPANTE = 1
+    RECHAZADO = 2
+    POSTULANTE = 3
+
+class category(Enum):
+    DEPORTE = 1
+    EVENTO =2
+    SEGURIDAD= 3
+    OTRO = 4
+
 
 participantes_table = db.Table(
     'participantes',
