@@ -16,6 +16,15 @@ const CreateSport = () => {
               id="deporte"
               placeholder="...."
             />
+            <label htmlFor="deporte" className="form-label">
+              Nombre de Evento
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="deporte"
+              placeholder="...."
+            />
             <label htmlFor="ubicacion" className="form-label">
               Ubicación
             </label>
