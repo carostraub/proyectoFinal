@@ -88,22 +88,34 @@ class Evento(db.Model):
     dinero = db.Column(db.String)
     category=db.Column(db.Integer, nullable=False)
     description=db.Column(db.String)
+    edad_min = db.Column(db.Integer, nullable=True)
+    edad_max = db.Column(db.Integer, nullable=True)
+    sexo_permitido = db.Column(db.String, nullable=False)
+    genero_permitido = db.Column(db.String, nullable=False)
 
     
     participantes = relationship('User', secondary=participantes_table, back_populates="eventos_postulados")
+    
+
 
     
     def serialize(self):
         return {
+            "id": self.id,
             "nombre_evento": self.nombre_evento,
             "ubicacion": self.ubicacion,
             "fecha_hora": self.fecha_hora,
             "dinero": self.dinero,
-            "organizador": self.organizador.nombre,
-            "category":self.category,
-            "description":self.description,
+            "organizador": self.organizador_user.nombre if self.organizador_user else None,
+            "category": self.category,
+            "description": self.description,
+            "edad_min": self.edad_min,
+            "edad_max": self.edad_max,
+            "sexo_permitido": self.sexo_permitido,
+            "genero_permitido": self.genero_permitido,
             "participantes": [usuario.nombre for usuario in self.participantes]
-        }
+    }
+
     def save(self):
         db.session.add(self)
         db.session.commit()
