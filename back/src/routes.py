@@ -98,6 +98,8 @@ def login():
     
     return jsonify(datos), 200
 
+
+
 @api.route('/evento', methods=['POST'])
 @jwt_required()
 def crear_evento():
@@ -148,3 +150,68 @@ def crear_evento():
         return jsonify(nuevo_evento.serialize()), 200
     except Exception as e:
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
+
+@api.route('/evento/<int:evento_id>', methods=['GET'])
+@jwt_required()
+def mi_evento(evento_id):
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    evento = Evento.query.get(evento_id)
+    
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    if not evento:
+        return jsonify({"error": "Evento no encontrado"}), 404
+
+    if evento.organizador != current_user_id:
+        return jsonify({"error": "Este no es tu evento"}), 400
+
+    response_data = {
+        "nombre_evento": evento.nombre_evento,
+        "categoria": evento.category,
+        "ubicacion": evento.ubicacion,
+        "fecha_hora": evento.fecha_hora,
+        "sexo_permitido": evento.sexo_permitido,
+        "genero_permitido": evento.genero_permitido,
+        "rango_edad": f"{evento.edad_min} - {evento.edad_max}" if evento.edad_min and evento.edad_max else "Sin restricción"
+    }
+
+    if evento.dinero:
+        response_data["cuota"] = evento.dinero
+
+    return jsonify(response_data), 200
+
+
+
+
+@api.route('/evento/<int:evento_id>', methods=['DELETE'])
+@jwt_required()
+def borrar_evento(evento_id):
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    evento = Evento.query.get(evento_id)
+    
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    if not evento:
+        return jsonify({"error": "Evento no encontrado"}), 404
+
+    if evento.organizador != current_user_id:
+        return jsonify({"error": "Este no es tu evento"}), 400
+    
+    evento.delete()
+
+    return jsonify({"status":"success", "msg":"Evento eliminado"}), 200
+
+@api.route('/profile', methods=['GET'])
+@jwt_required()
+def mi_perfil():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    return jsonify(user.serialize()), 200
