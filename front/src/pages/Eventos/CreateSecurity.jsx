@@ -7,6 +7,15 @@ const CreateSecurity = () => {
       <div className="row">
         <div className="col">
           <div className="mb-3">
+          <label htmlFor="deporte" className="form-label">
+              Nombre de Evento
+            </label>
+            <input
+              type="text"
+              className="form-control"
+              id="deporte"
+              placeholder="...."
+            />
             <label htmlFor="deporte" className="form-label">
               Ubicacion salida
             </label>
