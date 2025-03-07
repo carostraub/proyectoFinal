@@ -5,7 +5,7 @@
 //     ubicacion = db.Column(db.String, nullable=False)
 //     fecha_hora = db.Column(db.String, nullable=False)
 //     dinero = db.Column(db.String)
-    
+
 //     participantes = relationship('User', secondary=participantes_table, back_populates="eventos_postulados")
 
 //  const handleSubmit = async (e) => {
@@ -37,43 +37,72 @@
 //         }
 //     };
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config";
 
 const Search = () => {
-const [eventos,setEventos] = useState ([])
+  const [eventos, setEventos] = useState([
+    {
+      organizador: "julio",
+      nombre_evento: "futbol 5",
+      ubicacion: "lagomar",
+      fecha_hora: "18:30 14/03/2025",
+      dinero: "$150",
+      participantes: "10",
+      descripcion: "futbol tranqui entre amigos",
 
-  const obtenerEventos = async()=>{
+    },
+    {
+      organizador: "julio",
+      nombre_evento: "futbol 5",
+      ubicacion: "lagomar",
+      fecha_hora: "18:30 14/03/2025",
+      dinero: "$150",
+      participantes: "10",
+      descripcion: "futbol tranqui entre amigos",
+
+    }
+
+  ])
+
+  const obtenerEventos = async () => {
     try {
-      const response= await fetch(`${baseURL}/events`)
+      const response = await fetch(`${baseURL}/events`)
       const data = await response.json()
+      console.log(data)
+      setEventos(data)
     } catch (error) {
       console.log(error)
     }
 
   }
+  useEffect(() => {
+    // obtenerEventos()
+  }, [])
 
   return (
     <div className="container mt-2">
-      <div class="card">
-        <div class="card-header">Futbol</div>
-        <div class="card-body">
-          <div className="row">
-            <div className="col-9">
-              <h5 class="card-title">Ubicacion</h5>
-              <p class="card-text">Fecha y Hora</p>
-              <p class="card-text">Descripcion</p>
-              <p class="card-text">Requiere pago</p>
-            </div>
-            <div className="col-3">
-              <h5 class="card-title">Nombre Organizador</h5>
-              <a href="#" class="btn btn-outline-secondary">
-                Formar parte
-              </a>
+      {eventos.map((item, index) => (
+        <div className="card mb-5" key={index}>
+          <div className="card-header">{item.nombre_evento}</div>
+          <div className="card-body">
+            <div className="row">
+              <div className="col-9">
+                <h5 className="card-title">Ubicacion: {item.ubicacion}</h5>
+                <p className="card-text">Fecha y Hora: {item.fecha_hora}</p>
+                <p className="card-text">Descripcion: {item.descripcion}</p>
+                <p className="card-text">Requiere pago: {item.dinero}</p>
+              </div>
+              <div className="col-3">
+                <h5 className="card-title">Organizador: {item.organizador}</h5>
+                <a href="#" className="btn btn-outline-secondary">
+                  Formar parte
+                </a>
+              </div>
             </div>
           </div>
         </div>
-      </div>
+      ))}
     </div>
   );
 };
