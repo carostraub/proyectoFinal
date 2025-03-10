@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
-from models import User, Evento, participantes_table
+from models import User, Evento, participantes_table, db
 
 
 api = Blueprint("api", __name__)
@@ -57,10 +57,8 @@ def register():
         profilePicture=image_url  
     )
 
-    
     new_user.password = generate_password_hash(password)
 
-    
     try:
         new_user.save()
         access_token = create_access_token(identity=new_user.id) 
@@ -150,6 +148,9 @@ def crear_evento():
         return jsonify(nuevo_evento.serialize()), 200
     except Exception as e:
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
+    
+
+
 
 @api.route('/evento/<int:evento_id>', methods=['GET'])
 @jwt_required()
@@ -215,3 +216,119 @@ def mi_perfil():
         return jsonify({"error": "Usuario no encontrado"}), 404
 
     return jsonify(user.serialize()), 200
+
+
+
+
+
+@api.route('/eventos_disponibles', methods=['POST'])
+@jwt_required()
+def eventos_disponibles():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    data = request.get_json()  # filtros personalizados
+    categoria = data.get("categoria")
+    ubicacion = data.get("ubicacion")
+
+    # Buscar eventos donde el usuario NO sea el organizador y cumpla los filtros
+    query = Evento.query.filter(
+        Evento.organizador != current_user_id,  
+        ((Evento.edad_min <= user.edad) | (Evento.edad_min == None)),  
+        ((Evento.edad_max >= user.edad) | (Evento.edad_max == None)),  
+        ((Evento.sexo_permitido == user.sexo) | (Evento.sexo_permitido == "No importa")), 
+        ((Evento.genero_permitido == user.genero) | (Evento.genero_permitido == "No importa")) 
+    )
+
+    # Aplicar filtros adicionales 
+    if categoria:
+        query = query.filter(Evento.category == categoria)
+
+    if ubicacion:
+        query = query.filter(Evento.ubicacion.ilike(f"%{ubicacion}%"))
+
+    eventos_filtrados = query.all()
+    eventos_serializados = [evento.serialize() for evento in eventos_filtrados]
+
+    return jsonify({"eventos_disponibles": eventos_serializados}), 200
+
+
+
+
+@api.route('/gestionar_postulacion/<int:evento_id>', methods=['PATCH'])
+@jwt_required()
+def postular_evento(evento_id):
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+    evento = Evento.query.get(evento_id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    if not evento:
+        return jsonify({"error": "Evento no encontrado"}), 404
+
+    if evento.organizador == current_user_id:
+        return jsonify({"error": "No puedes postularte a tu propio evento"}), 400
+
+    
+    participante_existente = db.session.query(participantes_table).filter_by(
+        id_usuario=current_user_id, id_evento=evento_id).first()
+
+    if participante_existente:
+        return jsonify({"error": "Ya estás postulado a este evento"}), 400
+
+    # estado "POSTULANTE"
+    stmt = participantes_table.insert().values(
+        id_usuario=current_user_id,
+        id_evento=evento_id,
+        estatus="POSTULANTE"
+    )
+    db.session.execute(stmt)
+    db.session.commit()
+
+    return jsonify({"message": "Te has postulado al evento exitosamente"}), 200
+
+
+
+@api.route('/gestionar_postulacion/<int:evento_id>/<int:user_id>', methods=['PATCH'])
+@jwt_required()
+def gestionar_postulacion(evento_id, user_id):
+    current_user_id = get_jwt_identity()
+    evento = Evento.query.get(evento_id)
+    user = User.query.get(user_id)
+
+    if not evento:
+        return jsonify({"error": "Evento no encontrado"}), 404
+
+    if evento.organizador != current_user_id:
+        return jsonify({"error": "No tienes permiso para gestionar este evento"}), 403
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    data = request.get_json()
+    nuevo_estatus = data.get("estatus")
+
+    if nuevo_estatus not in ["PARTICIPANTE", "RECHAZADO"]:
+        return jsonify({"error": "Estatus no válido"}), 400
+
+    # Actualizar el estatus 
+    stmt = participantes_table.update().where(
+        (participantes_table.c.id_usuario == user_id) &
+        (participantes_table.c.id_evento == evento_id)
+    ).values(estatus=nuevo_estatus)
+
+    db.session.execute(stmt)
+    db.session.commit()
+
+    return jsonify({"message": f"El usuario ha sido {nuevo_estatus} en el evento"}), 200
+
+
+
+
+
+
