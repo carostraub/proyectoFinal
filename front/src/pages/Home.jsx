@@ -53,9 +53,11 @@ const Home = () => {
               </p>
               <div className="p-3">
                 <div>
-                  <button className="btn btn-outline-secondary w-75">
-                    Buscar evento
-                  </button>
+                <Link to="/search">
+                    <button className="btn btn-outline-secondary w-75">
+                      Buscar evento
+                    </button>
+                  </Link>
                 </div>
                 <Link to="/createsecurity">
                   <button className="btn btn-outline-secondary w-75">
@@ -82,9 +84,11 @@ const Home = () => {
               </p>
               <div className="mt-5">
                 <div>
-                  <button className="btn btn-outline-secondary w-75">
-                    Buscar evento
-                  </button>
+                <Link to="/search">
+                    <button className="btn btn-outline-secondary w-75">
+                      Buscar evento
+                    </button>
+                  </Link>
                 </div>
                 <Link to="/createevent">
                   <button className="btn btn-outline-secondary w-75">
@@ -112,9 +116,11 @@ const Home = () => {
               <p className="card-text">Pues crea tu propio evento aqui!</p>
               <div className="p-3">
                 <div>
-                  <button className="btn btn-outline-secondary w-75">
-                    Buscar evento
-                  </button>
+                <Link to="/search">
+                    <button className="btn btn-outline-secondary w-75">
+                      Buscar evento
+                    </button>
+                  </Link>
                 </div>
                 <Link to="/createother">
                   <button className="btn btn-outline-secondary w-75">
