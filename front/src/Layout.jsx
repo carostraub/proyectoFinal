@@ -13,6 +13,7 @@ import MyEvent from "./pages/Eventos/MyEvent";
 import CreateSecurity from "./pages/Eventos/CreateSecurity";
 import CreateSport from "./pages/Eventos/CreateSport";
 import Search from "./pages/Eventos/Search";
+import Settings from "./pages/Settings";
 
 export const Layout = () => {
   return (
@@ -29,6 +30,7 @@ export const Layout = () => {
         <Route path="/createsecurity" element={<CreateSecurity />} />
         <Route path="/createother" element={<CreateOther />} />
         <Route path="/myevent" element={<MyEvent />} />
+        <Route path="/settings" element={<Settings />} />
       </Routes>
     </AuthProvider>
   );
