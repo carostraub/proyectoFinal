@@ -219,8 +219,6 @@ def mi_perfil():
 
 
 
-
-
 @api.route('/eventos_disponibles', methods=['POST'])
 @jwt_required()
 def eventos_disponibles():
@@ -305,7 +303,7 @@ def gestionar_postulacion(evento_id, user_id):
         return jsonify({"error": "Evento no encontrado"}), 404
 
     if evento.organizador != current_user_id:
-        return jsonify({"error": "No tienes permiso para gestionar este evento"}), 403
+        return jsonify({"error": "No tienes permiso para gestionar este evento"}), 400
 
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
@@ -330,5 +328,44 @@ def gestionar_postulacion(evento_id, user_id):
 
 
 
+@api.route('/setting/<int:user_id>', methods=['PATCH'])
+@jwt_required()
+def setting(user_id):
+    current_user_id = get_jwt_identity()
+    user = User.query.get(user_id)
 
 
+    if user is None:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+    if user.id != current_user_id:
+        return jsonify({"error": "No puedes editar este perfil"}), 400
+
+    
+    new_username = request.form.get("usuario")
+    new_password = request.form.get("password")
+    new_profile_picture = request.files.get("profilePicture")
+
+    
+    if new_username:
+        user.usuario = new_username
+
+    
+    if new_password:
+        user.password = generate_password_hash(new_password)
+
+    if new_profile_picture:
+        try:
+            upload_result = cloudinary.uploader.upload(new_profile_picture, folder="crewup_profiles")
+            user.profilePicture = upload_result["secure_url"] 
+        except Exception as e:
+            return jsonify({"error": "Error al subir la imagen", "details": str(e)}), 500
+
+
+    try:
+        user.update()
+        return jsonify({
+            "message": "Perfil actualizado con éxito",
+            "user": user.serialize()
+        }), 200
+    except Exception as e:
+        return jsonify({"error": "Error al actualizar perfil", "details": str(e)}), 500
