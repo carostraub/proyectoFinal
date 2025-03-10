@@ -23,7 +23,7 @@ participantes_table = db.Table(
     'participantes',
     db.Column('id_usuario', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('id_evento', db.Integer, db.ForeignKey('eventos.id'), primary_key=True),
-    db.Column('estatus', db.Integer, nullable=False)
+    db.Column('estatus', db.Enum(estatus), nullable=False)
 )
 
 
@@ -86,7 +86,7 @@ class Evento(db.Model):
     ubicacion = db.Column(db.String, nullable=False)
     fecha_hora = db.Column(db.String, nullable=False)
     dinero = db.Column(db.String)
-    category=db.Column(db.Integer, nullable=False)
+    category=db.Column(db.Enum(category), nullable=False)
     description=db.Column(db.String)
     edad_min = db.Column(db.Integer, nullable=True)
     edad_max = db.Column(db.Integer, nullable=True)
