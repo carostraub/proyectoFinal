@@ -1,6 +1,37 @@
-import React from "react";
+import React, { useState } from "react";
+import { useAuth } from "../../../src/context/AuthContext";
 
 const CreateSport = () => {
+  const { user } = useAuth();
+
+  const [formData, setFormData] = useState({
+    nameSport: "",
+    nameEvent: "",
+    location: "",
+    time: "",
+    date: "",
+    missingPeople: 0,
+    payment: "no",
+    description: "",
+    sex: "",
+    gender: "",
+    ageRange: "",
+
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData)
+  }
+
   return (
     <div className="container text-center">
       <h1>Deporte</h1>
@@ -10,12 +41,18 @@ const CreateSport = () => {
             <label htmlFor="deporte" className="form-label">
               Deporte
             </label>
-            <input
-              type="text"
-              className="form-control"
-              id="deporte"
-              placeholder="...."
-            />
+            <div className="form-floating text-center">
+              <select className="form-select" id="floatingSelect" aria-label="Floating label select example"
+                name="nameSport"
+                onChange={handleChange}
+              >
+                <option selected>...</option>
+                <option value="Futbol">Futbol</option>
+                <option value="Basket">Basket</option>
+                <option value="Volley">Volley</option>
+              </select>
+
+            </div>
             <label htmlFor="deporte" className="form-label">
               Nombre de Evento
             </label>
@@ -24,6 +61,9 @@ const CreateSport = () => {
               className="form-control"
               id="deporte"
               placeholder="...."
+              name="nameEvent"
+              value={formData.nameEvent}
+              onChange={handleChange}
             />
             <label htmlFor="ubicacion" className="form-label">
               Ubicación
@@ -33,6 +73,9 @@ const CreateSport = () => {
               className="form-control"
               id="ubicacion"
               placeholder="...."
+              name="location"
+              value={formData.location}
+              onChange={handleChange}
             />
             <div className="row">
               <div className="col">
@@ -44,6 +87,9 @@ const CreateSport = () => {
                   className="form-control"
                   id="deporte"
                   placeholder="...."
+                  name="date"
+                  value={formData.date}
+                  onChange={handleChange}
                 />
               </div>
               <div className="col">
@@ -55,6 +101,9 @@ const CreateSport = () => {
                   className="form-control"
                   id="deporte"
                   placeholder="...."
+                  name="time"
+                  value={formData.time}
+                  onChange={handleChange}
                 />
               </div>
             </div>
@@ -70,6 +119,9 @@ const CreateSport = () => {
                     id="personasFaltan"
                     placeholder="...."
                     style={{ width: "5rem" }}
+                    name="missingPeople"
+                    value={formData.missingPeople}
+                    onChange={handleChange}
                   />
                 </div>
               </div>
@@ -78,9 +130,13 @@ const CreateSport = () => {
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     id="PagoCheckbox1"
-                    value="option1"
+                    value="si"
+                    checked={FormData.payment === "si"}
+                    onChange={handleChange}
+                    name="payment"
+
                   />
                   <label className="form-check-label" htmlFor="inlineCheckbox1">
                     Sí
@@ -89,9 +145,12 @@ const CreateSport = () => {
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
-                    type="checkbox"
+                    type="radio"
                     id="PagoCheckbox2"
-                    value="option2"
+                    value="no"
+                    checked={FormData.payment === "no"}
+                    onChange={handleChange}
+                    name="payment"
                   />
                   <label className="form-check-label" htmlFor="inlineCheckbox2">
                     No
@@ -205,13 +264,19 @@ const CreateSport = () => {
       <div className="row">
         <div className="col">
           <div className="form-floating">
-            <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }}></textarea>
+            <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }}
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+            >
+
+            </textarea>
             <label htmlFor="floatingTextarea2">Descripcion del evento...</label>
           </div>
         </div>
       </div>
       <div className="mt-5">
-        <button className="btn btn-outline-secondary w-50">Crear Evento</button>
+        <button className="btn btn-outline-secondary w-50" onClick={(e) => handleSubmit(e)}>Crear Evento</button>
       </div>
     </div>
   );

@@ -1,6 +1,8 @@
 import React from "react";
+import { useAuth } from "../../../src/context/AuthContext";
 
 const CreateSecurity = () => {
+  const { user } = useAuth();
   return (
     <div className="container text-center">
       <h1>Seguridad</h1>

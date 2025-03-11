@@ -39,9 +39,12 @@
 
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config";
+import { useAuth } from "../../../src/context/AuthContext";
 
 const Search = () => {
+  const { user } = useAuth();
   const [eventos, setEventos] = useState([
+
     {
       organizador: "julio",
       nombre_evento: "futbol 5",
