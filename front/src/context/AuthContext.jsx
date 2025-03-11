@@ -20,14 +20,14 @@ export const AuthProvider = ({ children }) => {
     useEffect(() => {
         const checkUser = async () => {
             try {
-                const response = await fetch(`${baseURL}/auth/user`, {
+                const response = await fetch(`${baseURL}/api/profile`, { 
                     method: "GET",
                     credentials: "include", 
                 });
                 const data = await response.json();
 
                 if (response.ok) {
-                    setUser(data.user); 
+                    setUser(data);  
                 } else {
                     setUser(null);
                 }
@@ -45,7 +45,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/auth/login`, {
+            const response = await fetch(`${baseURL}/api/login`, { 
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -71,7 +71,7 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/auth/register`, {
+            const response = await fetch(`${baseURL}/api/register`, { 
                 method: "POST",
                 body: userData, 
                 credentials: "include",
@@ -92,12 +92,12 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    //  Función para actualizar perfil
+    //  Función para actualizar perfil (nombre, usuario, contraseña, imagen)
     const updateProfile = async (profileData) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/auth/profile`, {
-                method: "PUT",
+            const response = await fetch(`${baseURL}/api/setting/${user.id}`, { 
+                method: "PATCH",
                 body: profileData, 
                 credentials: "include",
             });
@@ -105,7 +105,7 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
 
             if (response.ok) {
-                setUser(data.user);
+                setUser(data.user); // Se actualiza el contexto con el nuevo usuario
                 alert("Perfil actualizado con éxito");
             } else {
                 alert("Error al actualizar perfil: " + data.error);
@@ -117,10 +117,10 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    // ✅ Función para cerrar sesión
+    // Función para cerrar sesión
     const logout = async () => {
         try {
-            await fetch(`${baseURL}/auth/logout`, {
+            await fetch(`${baseURL}/api/logout`, { 
                 method: "POST",
                 credentials: "include",
             });
