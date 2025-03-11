@@ -1,8 +1,8 @@
 """empty message
 
-Revision ID: 33f06916dee3
+Revision ID: eae8cdba4a12
 Revises: 
-Create Date: 2025-03-06 12:31:18.993412
+Create Date: 2025-03-11 15:24:47.697585
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '33f06916dee3'
+revision = 'eae8cdba4a12'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -39,13 +39,19 @@ def upgrade():
     sa.Column('ubicacion', sa.String(), nullable=False),
     sa.Column('fecha_hora', sa.String(), nullable=False),
     sa.Column('dinero', sa.String(), nullable=True),
+    sa.Column('category', sa.Enum('DEPORTE', 'EVENTO', 'SEGURIDAD', 'OTRO', name='category'), nullable=False),
+    sa.Column('description', sa.String(), nullable=True),
+    sa.Column('edad_min', sa.Integer(), nullable=True),
+    sa.Column('edad_max', sa.Integer(), nullable=True),
+    sa.Column('sexo_permitido', sa.String(), nullable=False),
+    sa.Column('genero_permitido', sa.String(), nullable=False),
     sa.ForeignKeyConstraint(['organizador'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('participantes',
     sa.Column('id_usuario', sa.Integer(), nullable=False),
     sa.Column('id_evento', sa.Integer(), nullable=False),
-    sa.Column('estatus', sa.Integer(), nullable=False),
+    sa.Column('estatus', sa.Enum('PARTICIPANTE', 'RECHAZADO', 'POSTULANTE', name='estatus'), nullable=False),
     sa.ForeignKeyConstraint(['id_evento'], ['eventos.id'], ),
     sa.ForeignKeyConstraint(['id_usuario'], ['users.id'], ),
     sa.PrimaryKeyConstraint('id_usuario', 'id_evento')

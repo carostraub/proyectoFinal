@@ -1,5 +1,6 @@
 import os
 import sys
+import enum
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, backref
 from sqlalchemy import ForeignKey, Column, Integer, String, Table, Enum
@@ -7,12 +8,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
 
-class estatus(Enum):
+class Estatus(enum.Enum):
     PARTICIPANTE = 1
     RECHAZADO = 2
     POSTULANTE = 3
 
-class category(Enum):
+class Category(enum.Enum):
     DEPORTE = 1
     EVENTO =2
     SEGURIDAD= 3
@@ -23,7 +24,7 @@ participantes_table = db.Table(
     'participantes',
     db.Column('id_usuario', db.Integer, db.ForeignKey('users.id'), primary_key=True),
     db.Column('id_evento', db.Integer, db.ForeignKey('eventos.id'), primary_key=True),
-    db.Column('estatus', db.Enum(estatus), nullable=False)
+    db.Column('estatus', db.Enum(Estatus), nullable=False)
 )
 
 
@@ -86,7 +87,7 @@ class Evento(db.Model):
     ubicacion = db.Column(db.String, nullable=False)
     fecha_hora = db.Column(db.String, nullable=False)
     dinero = db.Column(db.String)
-    category=db.Column(db.Enum(category), nullable=False)
+    category=db.Column(db.Enum(Category), nullable=False)
     description=db.Column(db.String)
     edad_min = db.Column(db.Integer, nullable=True)
     edad_max = db.Column(db.Integer, nullable=True)

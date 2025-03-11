@@ -17,3 +17,6 @@ cloudinary = "*"
 
 [requires]
 python_version = "3.13"
+
+[scripts]
+start="python src/app.py"
