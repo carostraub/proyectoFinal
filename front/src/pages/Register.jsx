@@ -71,7 +71,7 @@ const Register = () => {
                         <h6>Email</h6>
                         <input className="mb-3" type="email" name="email" placeholder="Correo Electrónico" value={formData.email} onChange={handleChange} required />
                         <h6>Edad</h6>
-                        <input className="mb-3" type="number" name="age" placeholder="Edad" value={formData.age} onChange={handleChange} required min="15" />
+                        <input className="mb-3" type="number" name="age" placeholder="Edad" value={formData.age} onChange={handleChange} required min="16" />
                     </div>
                     <div className="col-md-6">
                         <h6>Contraseña</h6>

@@ -36,10 +36,30 @@ class User(db.Model):
     biography = db.Column(db.String, default="")
     profilePicture = db.Column(db.String, default="", nullable=False)
     
-    eventos_creados = relationship('Evento', back_populates="organizador_user", cascade="all, delete-orphan")
-    eventos_postulados = relationship('Evento', secondary=participantes_table, back_populates="participantes")
+    eventos_creados = relationship('Evento', back_populates="organizador_user", cascade="all, delete-orphan", lazy=True)
+    eventos_postulados = relationship('Evento', secondary=participantes_table, back_populates="participantes", lazy=True)
     
     def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "usuario": self.usuario,
+            "nombre": self.nombre,
+            "edad": self.edad,
+            "sexo": self.sexo,
+            "genero": self.genero,
+            "profile": self.profilePicture,
+            
+        }
+
+    def serialize_basic(self):
+        """ evitar problemas en relaciones """
+        return {
+            "id": self.id,
+            "nombre": self.nombre
+        }
+    
+    def serialize_complete(self):
         return {
             "id": self.id,
             "email": self.email,
@@ -52,13 +72,6 @@ class User(db.Model):
             "profile": self.profilePicture,
             "eventos_creados": [evento.serialize() for evento in self.eventos_creados],
             "eventos_postulados": [evento.serialize() for evento in self.eventos_postulados]
-        }
-
-    def serialize_basic(self):
-        """ evitar problemas en relaciones """
-        return {
-            "id": self.id,
-            "nombre": self.nombre
         }
 
     def save(self):
