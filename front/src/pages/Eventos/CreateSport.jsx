@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
+import AgeRange from "../../components/AgeRange";
 
 const CreateSport = () => {
   const { user } = useAuth();
@@ -31,6 +32,10 @@ const CreateSport = () => {
     e.preventDefault();
     console.log(formData)
   }
+
+  const handleAgeRangeChange = ({ edadMin, edadMax }) => {
+    setFormData({ ...formData, edadMin, edadMax });
+  };
 
   return (
     <div className="container text-center">
@@ -258,7 +263,7 @@ const CreateSport = () => {
           <h3 className="text-center mt-4">Rango de edad</h3>
 
           <label htmlFor="customRange1" className="form-label"></label>
-          <input type="range" className="form-range" id="customRange1"></input>
+          <AgeRange onChange={handleAgeRangeChange} />
         </div>
       </div>
       <div className="row">
