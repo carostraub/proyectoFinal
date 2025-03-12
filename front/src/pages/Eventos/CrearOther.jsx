@@ -1,5 +1,7 @@
 import React, {useState} from "react";
 import { useAuth } from "../../../src/context/AuthContext";
+import AgeRange from "../../components/AgeRange";
+
 
 const CreateOther = () => {
   const { user } = useAuth();
@@ -21,6 +23,10 @@ const CreateOther = () => {
             ...formData,
             [name]: value
         });
+    };
+
+    const handleAgeRangeChange = ({ edadMin, edadMax }) => {
+      setFormData({ ...formData, edadMin, edadMax });
     };
 
   return (
@@ -211,7 +217,7 @@ const CreateOther = () => {
           <h3 className="text-center mt-4">Rango de edad</h3>
 
           <label htmlFor="customRange1" className="form-label"></label>
-          <input type="range" className="form-range" id="customRange1"></input>
+          <AgeRange onChange={handleAgeRangeChange} />
         </div>
       </div>
       <div className="mt-5">
