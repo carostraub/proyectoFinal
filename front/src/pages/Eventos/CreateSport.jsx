@@ -1,9 +1,36 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
 import AgeRange from "../../components/AgeRange";
+import { baseURL } from "../../config/index";
 
 const CreateSport = () => {
   const { user } = useAuth();
+
+  const sports = [
+    "Ajedrez",
+    "Atletismo",
+    "Bádminton",
+    "Baloncesto",
+    "Balonmano",
+    "Béisbol",
+    "Billar",
+    "Boxeo",
+    "Ciclismo",
+    "Esgrima",
+    "Fútbol",
+    "Gimnasia",
+    "Golf",
+    "Halterofilia",
+    "Judo",
+    "Karate",
+    "Natación",
+    "Rugby",
+    "Taekwondo",
+    "Tenis",
+    "Tenis de mesa",
+    "Tiro con arco",
+    "Voleibol"
+  ];
 
   const [formData, setFormData] = useState({
     nameSport: "",
@@ -15,9 +42,11 @@ const CreateSport = () => {
     payment: "no",
     description: "",
     sex: "",
-    gender: "",
-    ageRange: "",
-
+    gender: [],
+    ageRange: {
+      edadMin: 16,
+      edadMax: 50
+    },
   });
 
   const handleChange = (e) => {
@@ -30,11 +59,80 @@ const CreateSport = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(formData)
+    if (!isFormComplete()) {
+      alert("Por favor, completa todos los campos antes de continuar.");
+      return;
+    } else {
+      console.log("Formulario enviado con éxito:", formData);
+      try {
+        // guardar formulario 
+        token = localStorage.getItem("access_token")
+        const response = await fetch(`${baseURL}/evento`, {
+          method: "POST",
+          headers:{
+            "Content-Type":"application/json",
+            Authorization: "Bearer "+token 
+                   },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          alert("Evento creado de forma exitosa! 🎉");
+
+        } else {
+          alert("Error al crear evento: " + result.error);
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 
   const handleAgeRangeChange = ({ edadMin, edadMax }) => {
-    setFormData({ ...formData, edadMin, edadMax });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ageRange: [{ edadMin, edadMax }]
+    }));
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+
+    setFormData((prevFormData) => {
+      if (checked) {
+        // Agregar el valor si está marcado
+        return { ...prevFormData, gender: [...prevFormData.gender, value] };
+      } else {
+        // Remover el valor si está desmarcado
+        return { ...prevFormData, gender: prevFormData.gender.filter((g) => g !== value) };
+      }
+    });
+  };
+
+  const isFormComplete = () => {
+    const { nameSport, nameEvent, location, time, date, missingPeople, payment, description, sex, gender, ageRange } = formData;
+
+    // Verificar que los campos de texto no estén vacíos
+    if (!nameSport || !nameEvent || !location || !time || !date || !description || !sex) {
+      return false;
+    }
+
+    // Verificar que missingPeople sea mayor que 0
+    if (missingPeople <= 0) {
+      return false;
+    }
+
+    // Verificar que gender no esté vacío (debe haber al menos un género seleccionado)
+    if (!gender.length) {
+      return false;
+    }
+
+    // Verificar que el rango de edad sea válido
+    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
+      return false;
+    }
+
+    return true; // Todos los campos están completos y válidos
   };
 
   return (
@@ -47,14 +145,19 @@ const CreateSport = () => {
               Deporte
             </label>
             <div className="form-floating text-center">
-              <select className="form-select" id="floatingSelect" aria-label="Floating label select example"
+              <select
+                className="form-select"
+                id="floatingSelect"
+                aria-label="Floating label select example"
                 name="nameSport"
                 onChange={handleChange}
               >
                 <option selected>...</option>
-                <option value="Futbol">Futbol</option>
-                <option value="Basket">Basket</option>
-                <option value="Volley">Volley</option>
+                {sports.map((sport, index) => (
+                  <option key={index} value={sport}>
+                    {sport}
+                  </option>
+                ))}
               </select>
 
             </div>
@@ -175,64 +278,67 @@ const CreateSport = () => {
               className="form-check-input"
               type="checkbox"
               id="GeneroCheckbox1"
-              value="option1"
+              value="Hombre"
+              onChange={handleCheckboxChange}
             />
-            <label className="form-check-label" htmlFor="inlineCheckbox1">
-              Hombre
-            </label>
+            <label className="form-check-label" htmlFor="GeneroCheckbox1">Hombre</label>
           </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="GeneroCheckbox2"
-              value="option2"
-            />
-            <label className="form-check-label" htmlFor="inlineCheckbox2">
-              Mujer
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="GeneroCheckbox3"
-              value="option3"
-            />
-            <label className="form-check-label" htmlFor="inlineCheckbox2">
-              No Binario
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="GeneroCheckbox4"
-              value="option4"
-            />
-            <label className="form-check-label" htmlFor="inlineCheckbox2">
-              Otro
-            </label>
-          </div>
-          <div className="form-check form-check-inline">
-            <input
-              className="form-check-input"
-              type="checkbox"
-              id="GeneroCheckbox5"
-              value="option5"
-            />
-            <label className="form-check-label" htmlFor="inlineCheckbox2">
-              No importa
-            </label>
-          </div>
-          <h3 className="text-center mt-4">Sexo</h3>
 
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
               type="checkbox"
+              id="GeneroCheckbox2"
+              value="Mujer"
+              onChange={handleCheckboxChange}
+            />
+            <label className="form-check-label" htmlFor="GeneroCheckbox2">Mujer</label>
+          </div>
+
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="GeneroCheckbox3"
+              value="No Binario"
+              onChange={handleCheckboxChange}
+            />
+            <label className="form-check-label" htmlFor="GeneroCheckbox3">No Binario</label>
+          </div>
+
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="GeneroCheckbox4"
+              value="Otro"
+              onChange={handleCheckboxChange}
+            />
+            <label className="form-check-label" htmlFor="GeneroCheckbox4">Otro</label>
+          </div>
+
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="checkbox"
+              id="GeneroCheckbox5"
+              value="No importa"
+              onChange={handleCheckboxChange}
+            />
+            <label className="form-check-label" htmlFor="GeneroCheckbox5">No importa</label>
+          </div>
+
+          <h3 className="text-center mt-4">Sexo</h3>
+
+          <div className="form-check form-check-inline">
+            <input
+              className="form-check-input"
+              type="radio"
               id="SexoCheckbox1"
-              value="option1"
+              name="sex"
+              value="Masculino"
+              checked={formData.sex === "Masculino"}
+              onChange={handleChange}
             />
             <label className="form-check-label" htmlFor="inlineCheckbox1">
               Masculino
@@ -241,9 +347,12 @@ const CreateSport = () => {
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
-              type="checkbox"
+              type="radio"
               id="SexoCheckbox2"
-              value="option2"
+              name="sex"
+              value="Femenino"
+              checked={formData.sex === "Femenino"}
+              onChange={handleChange}
             />
             <label className="form-check-label" htmlFor="inlineCheckbox2">
               Femenino
@@ -252,9 +361,12 @@ const CreateSport = () => {
           <div className="form-check form-check-inline">
             <input
               className="form-check-input"
-              type="checkbox"
+              type="radio"
               id="SexoCheckbox3"
-              value="option3"
+              name="sex"
+              value="Mixto"
+              checked={formData.sex === "Mixto"}
+              onChange={handleChange}
             />
             <label className="form-check-label" htmlFor="inlineCheckbox2">
               Mixto
