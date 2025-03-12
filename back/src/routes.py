@@ -88,7 +88,7 @@ def login():
     if not user.verify_password(password):
         return jsonify({ "error": "Datos incorrectos"}), 400
     
-    access_token = create_access_token(identity=str(user.id))
+    access_token = create_access_token(identity=(user.id))
     
     datos = {
         "access_token": access_token
@@ -164,7 +164,7 @@ def mi_evento(evento_id):
     if not evento:
         return jsonify({"error": "Evento no encontrado"}), 404
 
-    if evento.organizador != current_user_id:
+    if evento.organizador_id != current_user_id:
         return jsonify({"error": "Este no es tu evento"}), 400
 
     response_data = {
@@ -189,21 +189,16 @@ def mi_evento(evento_id):
 @jwt_required()
 def borrar_evento(evento_id):
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
     evento = Evento.query.get(evento_id)
     
-    if not user:
-        return jsonify({"error": "Usuario no encontrado"}), 404
-
     if not evento:
         return jsonify({"error": "Evento no encontrado"}), 404
 
-    if evento.organizador != current_user_id:
-        return jsonify({"error": "Este no es tu evento"}), 400
+    if evento.organizador_id != current_user_id:
+        return jsonify({"error": "No tienes permiso para borrar este evento"}), 400
     
     evento.delete()
-
-    return jsonify({"status":"success", "msg":"Evento eliminado"}), 200
+    return jsonify({"message": "Evento eliminado correctamente"}), 200
 
 @api.route('/profile', methods=['GET'])
 @jwt_required()
@@ -233,7 +228,7 @@ def eventos_disponibles():
 
     # Buscar eventos donde el usuario NO sea el organizador y cumpla los filtros
     query = Evento.query.filter(
-        Evento.organizador != current_user_id,  
+        Evento.organizador_id != current_user_id,  
         ((Evento.edad_min <= user.edad) | (Evento.edad_min == None)),  
         ((Evento.edad_max >= user.edad) | (Evento.edad_max == None)),  
         ((Evento.sexo_permitido == user.sexo) | (Evento.sexo_permitido == "No importa")), 
@@ -268,7 +263,7 @@ def postular_evento(evento_id):
     if not evento:
         return jsonify({"error": "Evento no encontrado"}), 404
 
-    if evento.organizador == current_user_id:
+    if evento.organizador_id == current_user_id:
         return jsonify({"error": "No puedes postularte a tu propio evento"}), 400
 
     
@@ -280,10 +275,10 @@ def postular_evento(evento_id):
 
     # estado "POSTULANTE"
     stmt = participantes_table.insert().values(
-        id_usuario=current_user_id,
-        id_evento=evento_id,
-        estatus="POSTULANTE"
-    )
+    id_usuario=current_user_id,
+    id_evento=evento_id,
+    estatus=Estatus.POSTULANTE
+)
     db.session.execute(stmt)
     db.session.commit()
 
@@ -301,7 +296,7 @@ def gestionar_postulacion(evento_id, user_id):
     if not evento:
         return jsonify({"error": "Evento no encontrado"}), 404
 
-    if evento.organizador != current_user_id:
+    if evento.organizador_id != current_user_id:
         return jsonify({"error": "No tienes permiso para gestionar este evento"}), 400
 
     if not user:
@@ -317,7 +312,7 @@ def gestionar_postulacion(evento_id, user_id):
     stmt = participantes_table.update().where(
         (participantes_table.c.id_usuario == user_id) &
         (participantes_table.c.id_evento == evento_id)
-    ).values(estatus=nuevo_estatus)
+    ).values(estatus=Estatus[nuevo_estatus])
 
     db.session.execute(stmt)
     db.session.commit()
