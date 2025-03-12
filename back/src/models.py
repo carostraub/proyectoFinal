@@ -84,7 +84,8 @@ class Evento(db.Model):
     organizador_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     nombre_evento = db.Column(db.String, nullable=False)
     ubicacion = db.Column(db.String, nullable=False)
-    fecha_hora = db.Column(db.String, nullable=False)
+    fecha = db.Column(db.String, nullable=False)
+    hora = db.Column(db.String, nullable=False)
     dinero = db.Column(db.String)
     category = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     description = db.Column(db.String)
@@ -102,7 +103,8 @@ class Evento(db.Model):
             "id": self.id,
             "nombre_evento": self.nombre_evento,
             "ubicacion": self.ubicacion,
-            "fecha_hora": self.fecha_hora,
+            "fecha": self.fecha,
+            "hora": self.hora,
             "dinero": self.dinero,
             "organizador": self.organizador_user.serialize_basic() if self.organizador_user else None,
             "category": self.category.value if isinstance(self.category, Category) else None,

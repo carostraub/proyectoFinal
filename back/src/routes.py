@@ -4,7 +4,7 @@ from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
-from models import User, Evento, participantes_table, db
+from models import User, Evento, participantes_table, db, Estatus, Category
 
 
 api = Blueprint("api", __name__)
@@ -84,9 +84,9 @@ def login():
     
     user = User.query.filter_by(email=email).first()
     if not user:
-        return jsonify({ "error": "Datos incorrectos"}), 401
+        return jsonify({ "error": "Datos incorrectos"}), 400
     if not user.verify_password(password):
-        return jsonify({ "error": "Datos incorrectos"}), 401
+        return jsonify({ "error": "Datos incorrectos"}), 400
     
     access_token = create_access_token(identity=str(user.id))
     
@@ -109,12 +109,12 @@ def crear_evento():
 
     data = request.get_json()
 
-    required_fields = ["nombre_evento", "ubicacion", "fecha_hora", "category"]
+    required_fields = ["nombre_evento", "ubicacion", "fecha", "hora", "category"]
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"Falta el campo requerido: {field}"}), 400
 
-    # Validaciones para los nuevos filtros
+    # Validaciones de edad, sexo y género
     edad_min = data.get("edad_min")
     edad_max = data.get("edad_max")
     sexo_permitido = data.get("sexo_permitido", "No importa")
@@ -123,17 +123,16 @@ def crear_evento():
     if edad_min and edad_max and edad_min > edad_max:
         return jsonify({"error": "La edad mínima no puede ser mayor que la edad máxima"}), 400
 
-    if sexo_permitido not in ["Masculino", "Femenino", "Intersexual", "No importa"]:
-        return jsonify({"error": "Valor de sexo inválido"}), 400
-
-    if genero_permitido not in ["Hombre", "Mujer", "No Binario", "Otro", "No importa"]:
-        return jsonify({"error": "Valor de género inválido"}), 400
+    category = Category.query.get(data["category"])
+    if not category:
+        return jsonify({"error": "Categoría no válida"}), 400
 
     nuevo_evento = Evento(
-        organizador=current_user_id,
+        organizador_id=current_user_id,
         nombre_evento=data["nombre_evento"],
         ubicacion=data["ubicacion"],
-        fecha_hora=data["fecha_hora"],
+        fecha=data["fecha"],
+        hora=data["hora"],
         dinero=data.get("dinero"),
         category=data["category"],
         description=data.get("description"),
