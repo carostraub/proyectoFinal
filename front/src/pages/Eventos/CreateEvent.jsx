@@ -41,60 +41,86 @@ const CreateEvent = () => {
               id="ubicacion"
               placeholder="...."
             />
-            <label htmlFor="deporte" className="form-label">
-              Fecha
-            </label>
-            <input
-              type="date"
-              className="form-control"
-              id="deporte"
-              placeholder="...."
-            />
-            <label htmlFor="deporte" className="form-label">
-              Horario
-            </label>
-            <input
-              type="time"
-              className="form-control"
-              id="deporte"
-              placeholder="...."
-            />
-
-            <label htmlFor="personasFaltan" className="form-label">
-              ¿Cuántas personas faltan?
-            </label>
-            <div className="d-flex justify-content-center">
-              <input
-                type="number"
-                className="form-control"
-                id="personasFaltan"
-                placeholder="...."
-                style={{ width: "5rem" }}
-              />
+             <div className="row">
+              <div className="col">
+                <label htmlFor="deporte" className="form-label">
+                  Fecha
+                </label>
+                <input
+                  type="date"
+                  className="form-control"
+                  id="deporte"
+                  placeholder="...."
+                  // name="date"
+                  // value={formData.date}
+                  // onChange={handleChange}
+                />
+              </div>
+              <div className="col">
+                <label htmlFor="deporte" className="form-label">
+                  Horario
+                </label>
+                <input
+                  type="time"
+                  className="form-control"
+                  id="deporte"
+                  placeholder="...."
+                  // name="time"
+                  // value={formData.time}
+                  // onChange={handleChange}
+                />
+              </div>
             </div>
+            <div className="row">
+              <div className="col">
+                <label htmlFor="personasFaltan" className="form-label">
+                  ¿Cuántas personas faltan?
+                </label>
+                <div className="d-flex justify-content-center">
+                  <input
+                    type="number"
+                    className="form-control"
+                    id="personasFaltan"
+                    placeholder="...."
+                    style={{ width: "5rem" }}
+                    // name="missingPeople"
+                    // value={formData.missingPeople}
+                    // onChange={handleChange}
+                  />
+                </div>
+              </div>
+              <div className="col">
+                <div>¿Se requiere de pago?</div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="PagoCheckbox1"
+                    // value="si"
+                    // checked={FormData.payment === "si"}
+                    // onChange={handleChange}
+                    // name="payment"
 
-            <div>¿Se requiere de pago?</div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox1"
-                value="option1"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox1">
-                Sí
-              </label>
-            </div>
-            <div className="form-check form-check-inline">
-              <input
-                className="form-check-input"
-                type="checkbox"
-                id="PagoCheckbox2"
-                value="option2"
-              />
-              <label className="form-check-label" htmlFor="inlineCheckbox2">
-                No
-              </label>
+                  />
+                  <label className="form-check-label" htmlFor="inlineCheckbox1">
+                    Sí
+                  </label>
+                </div>
+                <div className="form-check form-check-inline">
+                  <input
+                    className="form-check-input"
+                    type="radio"
+                    id="PagoCheckbox2"
+                    // value="no"
+                    // checked={FormData.payment === "no"}
+                    // onChange={handleChange}
+                    // name="payment"
+                  />
+                  <label className="form-check-label" htmlFor="inlineCheckbox2">
+                    No
+                  </label>
+                </div>
+              </div>
             </div>
           </div>
         </div>
