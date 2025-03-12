@@ -1,6 +1,28 @@
-import React from "react";
+import React, {useState} from "react";
+import { useAuth } from "../../../src/context/AuthContext";
 
 const CreateOther = () => {
+  const { user } = useAuth();
+
+    const [formData, setFormData] = useState({
+          name: "",
+          username: "",
+          email: "",
+          age: "",
+          password: "",
+          profilePicture: null,
+          gender: "",
+          sex: ""
+      });
+
+      const handleChange = (e) => {
+        const { name, value } = e.target;
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
+
   return (
     <div className="container text-center">
       <h1>Crea tu evento personalizado</h1>
