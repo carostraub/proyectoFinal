@@ -30,7 +30,7 @@ const AgeRange = ({ onChange }) => {
           <input
             type="range"
             id="edadMin"
-            min="0"
+            min="16"
             max="100"
             step="1"
             value={edadMin}
@@ -46,7 +46,7 @@ const AgeRange = ({ onChange }) => {
           <input
             type="range"
             id="edadMax"
-            min="0"
+            min="16"
             max="100"
             step="1"
             value={edadMax}

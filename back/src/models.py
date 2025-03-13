@@ -3,7 +3,7 @@ import sys
 import enum
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy.orm import relationship, backref
-from sqlalchemy import ForeignKey, Column, Integer, String, Table, Enum
+from sqlalchemy import ForeignKey, Column, Integer, String, Table, Enum, Date, Time
 from werkzeug.security import generate_password_hash, check_password_hash
 
 db = SQLAlchemy()
@@ -34,12 +34,32 @@ class User(db.Model):
     sexo = db.Column(db.String, nullable=False)
     genero = db.Column(db.String, nullable=False)
     biography = db.Column(db.String, default="")
-    profilePicture = db.Column(db.String, default="", nullable=False)
+    profilePicture = db.Column(db.String, default=None, nullable=False)
     
-    eventos_creados = relationship('Evento', back_populates="organizador_user", cascade="all, delete-orphan")
-    eventos_postulados = relationship('Evento', secondary=participantes_table, back_populates="participantes")
+    eventos_creados = relationship('Evento', back_populates="organizador_user", cascade="all, delete-orphan", lazy=True)
+    eventos_postulados = relationship('Evento', secondary=participantes_table, back_populates="participantes", lazy=True)
     
     def serialize(self):
+        return {
+            "id": self.id,
+            "email": self.email,
+            "usuario": self.usuario,
+            "nombre": self.nombre,
+            "edad": self.edad,
+            "sexo": self.sexo,
+            "genero": self.genero,
+            "profilePicture": self.profilePicture,
+            
+        }
+
+    def serialize_basic(self):
+        """ evitar problemas en relaciones """
+        return {
+            "id": self.id,
+            "nombre": self.nombre
+        }
+    
+    def serialize_complete(self):
         return {
             "id": self.id,
             "email": self.email,
@@ -52,13 +72,6 @@ class User(db.Model):
             "profile": self.profilePicture,
             "eventos_creados": [evento.serialize() for evento in self.eventos_creados],
             "eventos_postulados": [evento.serialize() for evento in self.eventos_postulados]
-        }
-
-    def serialize_basic(self):
-        """ evitar problemas en relaciones """
-        return {
-            "id": self.id,
-            "nombre": self.nombre
         }
 
     def save(self):
@@ -84,8 +97,9 @@ class Evento(db.Model):
     organizador_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
     nombre_evento = db.Column(db.String, nullable=False)
     ubicacion = db.Column(db.String, nullable=False)
-    fecha = db.Column(db.String, nullable=False)
-    hora = db.Column(db.String, nullable=False)
+    final_ubication=db.Column(db.String)
+    fecha = db.Column(Date, nullable=False)
+    hora = db.Column(Time, nullable=False)
     dinero = db.Column(db.String)
     category = db.Column(db.Integer, db.ForeignKey('categories.id'), nullable=False)
     description = db.Column(db.String)
@@ -107,7 +121,25 @@ class Evento(db.Model):
             "hora": self.hora,
             "dinero": self.dinero,
             "organizador": self.organizador_user.serialize_basic() if self.organizador_user else None,
-            "category": self.category.value if isinstance(self.category, Category) else None,
+            "category": self.categoria.titulo if self.categoria else None,
+            "description": self.description,
+            "edad_min": self.edad_min,
+            "edad_max": self.edad_max,
+            "sexo_permitido": self.sexo_permitido,
+            "genero_permitido": self.genero_permitido,
+            "participantes": [usuario.serialize_basic() for usuario in self.participantes]
+        }
+    
+    def serialize_security(self):
+        return {
+            "id": self.id,
+            "nombre_evento": self.nombre_evento,
+            "ubicacion": self.ubicacion,
+            "fecha": self.fecha,
+            "hora": self.hora,
+            "final_ubication": self.final_ubication,
+            "organizador": self.organizador_user.serialize_basic() if self.organizador_user else None,
+            "category": self.categoria.titulo if self.categoria else None,
             "description": self.description,
             "edad_min": self.edad_min,
             "edad_max": self.edad_max,

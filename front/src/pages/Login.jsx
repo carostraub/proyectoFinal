@@ -1,8 +1,19 @@
-import React from "react";
+import React, {useState} from "react";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth(); // Obtener la función login del contexto
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    await login(email, password); // Llamar a la función login del contexto
+  };
+
+  
   return (
-    <form className="container w-50 mt-1">
+    <form className="container w-50 mt-1" onSubmit={handleSubmit}>
       <div className="mb-3">
         <label htmlFor="exampleInputEmail1" className="form-label">
           Dirección de email
@@ -11,10 +22,13 @@ const Login = () => {
           type="email"
           className="form-control"
           id="exampleInputEmail1"
+          value={email}
           aria-describedby="emailHelp"
+          onChange={(e) => setEmail(e.target.value)}
+          required
         />
         <div id="emailHelp" className="form-text">
-          Itroduce tu dirección de email.
+          Introduce tu dirección de email.
         </div>
       </div>
       <div className="mb-3">
@@ -25,6 +39,9 @@ const Login = () => {
           type="password"
           className="form-control"
           id="exampleInputPassword1"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
         />
       </div>
       <div className="mb-3 form-check">
