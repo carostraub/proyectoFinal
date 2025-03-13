@@ -8,10 +8,10 @@ const Profile = () => {
     <div className="container mt-5">
       <div className="card text-center shadow-lg p-4">
         {/* Nombre del Usuario como título */}
-        <h2 className="mt-3">{user?.name || "Usuario Desconocido"}</h2>
+        <h2 className="mt-3">{user?.nombre || "Usuario Desconocido"}</h2>
         {/* Foto de Perfil */}
         <img
-          src={user?.profile || "https://via.placeholder.com/150"}
+          src={user?.profilePicture || "https://via.placeholder.com/150"}
           onError={(e) => {e.target.onerror = null}} 
           alt="Foto de perfil"
           className="rounded-circle mx-auto d-block"
@@ -22,7 +22,7 @@ const Profile = () => {
 
 
         {/* Biografía */}
-        <p className="text-muted">{user?.bio || "Este usuario aún no ha agregado una biografía."}</p>
+        <p className="text-muted">{user?.biography || "Este usuario aún no ha agregado una biografía."}</p>
 
 
 
