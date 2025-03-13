@@ -31,7 +31,7 @@ app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=2)
 db.init_app(app)
 Migrate(app, db)
 jwt = JWTManager(app)
-CORS(app)
+CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True) #el frontend es `http://localhost:5173`
 
 app.route('/')
 def main():
@@ -40,4 +40,4 @@ def main():
 app.register_blueprint(api, url_prefix="/api")
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host="127.0.0.1", port=5000, debug=True)

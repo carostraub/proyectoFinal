@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from "react";
-import { baseURL } from "../config/index"; 
+import { baseURL } from "../config/index";
 import { useNavigate } from "react-router-dom";
 
 // Crear el contexto de autenticación
@@ -12,31 +12,41 @@ export const useAuth = () => {
 
 // Proveedor de autenticación que manejará el estado del usuario
 export const AuthProvider = ({ children }) => {
-    const [user, setUser] = useState(null); 
-    const [loading, setLoading] = useState(true); 
+    const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
     const navigate = useNavigate();
 
     //  Comprobar si el usuario ya está autenticado al cargar la app
     useEffect(() => {
         const checkUser = async () => {
             try {
+                const token = localStorage.getItem("access_token"); //  Recuperar el token
+        
+                if (!token) {
+                    setUser(null);
+                    return;
+                }
+        
                 const response = await fetch(`${baseURL}/api/profile`, { 
                     method: "GET",
+                    headers: { "Authorization": `Bearer ${token}` }, //  Enviar el token en la cabecera
                     credentials: "include", 
                 });
-                const data = await response.json();
-
-                if (response.ok) {
-                    setUser(data);  
-                } else {
-                    setUser(null);
+        
+                if (!response.ok) {
+                    throw new Error("Usuario no autenticado");
                 }
+        
+                const data = await response.json();
+                setUser(data);
             } catch (error) {
                 console.error("Error al verificar usuario:", error);
+                setUser(null);
             } finally {
                 setLoading(false);
             }
         };
+        
 
         checkUser();
     }, []);
@@ -45,7 +55,7 @@ export const AuthProvider = ({ children }) => {
     const login = async (email, password) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/api/login`, { 
+            const response = await fetch(`${baseURL}/api/login`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ email, password }),
@@ -55,8 +65,9 @@ export const AuthProvider = ({ children }) => {
             const data = await response.json();
 
             if (response.ok) {
+                localStorage.setItem("access_token", data.access_token); //  Guardar el token
                 setUser(data.user);
-                navigate("/"); 
+                navigate("/"); //Redirige al Home
             } else {
                 alert("Error al iniciar sesión: " + data.error);
             }
@@ -71,9 +82,9 @@ export const AuthProvider = ({ children }) => {
     const register = async (userData) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/api/register`, { 
+            const response = await fetch(`${baseURL}/api/register`, {
                 method: "POST",
-                body: userData, 
+                body: userData,
                 credentials: "include",
             });
 
@@ -81,7 +92,7 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 setUser(data.user);
-                navigate("/"); 
+                navigate("/");
             } else {
                 alert("Error al registrarse: " + data.error);
             }
@@ -96,9 +107,9 @@ export const AuthProvider = ({ children }) => {
     const updateProfile = async (profileData) => {
         setLoading(true);
         try {
-            const response = await fetch(`${baseURL}/api/setting/${user.id}`, { 
+            const response = await fetch(`${baseURL}/api/setting/${user.id}`, {
                 method: "PATCH",
-                body: profileData, 
+                body: profileData,
                 credentials: "include",
             });
 
@@ -120,13 +131,13 @@ export const AuthProvider = ({ children }) => {
     // Función para cerrar sesión
     const logout = async () => {
         try {
-            await fetch(`${baseURL}/api/logout`, { 
+            await fetch(`${baseURL}/api/logout`, {
                 method: "POST",
                 credentials: "include",
             });
 
             setUser(null);
-            navigate("/login"); 
+            navigate("/login");
         } catch (error) {
             console.error("Error en logout:", error);
         }

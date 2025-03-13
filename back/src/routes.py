@@ -1,5 +1,6 @@
 import os
 import cloudinary.uploader
+from flask_cors import cross_origin
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, request, jsonify
@@ -11,6 +12,7 @@ api = Blueprint("api", __name__)
 
 
 @api.route('/register', methods=['POST'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 def register():
     
     email = request.form.get("email")
@@ -72,6 +74,7 @@ def register():
 
 
 @api.route('/login', methods=['POST'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 def login():
     
     email= request.json.get('email')
@@ -90,11 +93,10 @@ def login():
     
     access_token = create_access_token(identity=(user.id))
     
-    datos = {
-        "access_token": access_token
-    }
-    
-    return jsonify(datos), 200
+    return jsonify({
+        "access_token": access_token,
+        "user": user.serialize()  # Enviar también los datos del usuario
+    }), 200
 
 
 
@@ -214,6 +216,7 @@ def mi_perfil():
 
 
 @api.route('/eventos_disponibles', methods=['POST'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def eventos_disponibles():
     current_user_id = get_jwt_identity()
@@ -251,6 +254,7 @@ def eventos_disponibles():
 
 
 @api.route('/gestionar_postulacion/<int:evento_id>', methods=['PATCH'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def postular_evento(evento_id):
     current_user_id = get_jwt_identity()
@@ -287,6 +291,7 @@ def postular_evento(evento_id):
 
 
 @api.route('/gestionar_postulacion/<int:evento_id>/<int:user_id>', methods=['PATCH'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def gestionar_postulacion(evento_id, user_id):
     current_user_id = get_jwt_identity()
