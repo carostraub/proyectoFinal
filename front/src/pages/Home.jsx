@@ -1,136 +1,75 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import CardsCategories from "../components/CardsCategories.jsx";
+import { baseURL } from "../config/index.js";
 
 const Home = () => {
-  const cardStyle = {
-    width: "26rem",
-    height: "19rem",
-  };
+
+  const categories = [
+    {
+      id: 1,
+      categoria: "Deportes",
+      titulo: "Crea tu evento deportivo!",
+      description1: "Buscas rival o compañeros de equipo?",
+      description2: "Pues aqui tienes tu solucion!",
+      url: "/createsport"
+    },
+    {
+      id: 2,
+      categoria: "Seguridad",
+      titulo: "Busca tu compañero aqui!",
+      description1: "Te espera un camino peligroso o no deseado?",
+      description2: "Pues aqui puedes buscar un acompañante para tu viaje!",
+      url: "/createsecurity"
+    },
+    {
+      id: 3,
+      categoria: "Eventos",
+      titulo: "Crea tu evento aqui!",
+      description1: "Buscas un acompañante para un concierto o evento?",
+      description2: "Aqui puedes encontrar tu acompañante ideal!",
+      url: "/createevent"
+    },
+    {
+      id: 4,
+      categoria: "Otros",
+      titulo: "Crea tu evento personalizado!",
+      description1: "Estas aburrido y buscas una o mas personas para llevar a cabo una actividad?",
+      description2: "Pues crea tu propio evento aqui!",
+      url: "/createother"
+    }
+  ]
+
+  const [listCategories, setLisCategories] = useState(categories)
+
+  const getCategories = async () => {
+    try {
+      const response = await fetch(`${baseURL}/categories`)
+      const data = await response.json()
+      setLisCategories(data)
+    } catch (error) {
+      console.log('Error al cargar categorias: ', error)
+    }
+  }
+
+  useEffect(() => {
+    //getCategories()
+  }, [])
 
   return (
     <div className="container mt-4">
       <div className="row">
-        {/* Columna 1 */}
-        <div className="col-md-6 col-6 text-center">
-          <div className="card text-bg-light mb-3 " style={cardStyle}>
-            <div className="card-header text-center">Deportes</div>
-            <div className="card-body">
-              <h5 className="card-title ">Crea tu evento deportivo!</h5>
-              <p className="card-texttext-center">
-                Buscas rival o compañeros de equipo?
-              </p>
-              <p className="card-text">Pues aqui tienes tu solucion!</p>
-              <div className="mt-5">
-                <div>
-                  <Link to="/search">
-                    <button className="btn btn-outline-secondary w-75">
-                      Buscar evento
-                    </button>
-                  </Link>
-                </div>
-                <Link to="/createsport">
-                  <button className="btn btn-outline-secondary w-75">
-                    Crear evento
-                  </button>
-                </Link>
-              </div>
-            </div>
+        {listCategories.map((item) => (
+          <div className="col-sm-6 col-md-6 text-center" key={item.id}>
+            <CardsCategories
+              id={item.id}
+              categoria={item.categoria}
+              titulo={item.titulo}
+              description1={item.description1}
+              description2={item.description2}
+              url={item.url}
+            />
           </div>
-        </div>
-        <div className="col-md-6 col-6 ">
-          <div
-            className="card text-bg-light mb-3 text-center"
-            style={cardStyle}
-          >
-            <div className="card-header text-center">Seguridad</div>
-            <div className="card-body">
-              <h5 className="card-title">Busca tu compañero aqui!</h5>
-              <p className="card-text">
-                Te espera un camino peligroso o no deseado?
-              </p>
-              <p className="card-text">
-                Pues aqui puedes buscar un acompañante para tu viaje!
-              </p>
-              <div className="p-3">
-                <div>
-                <Link to="/search">
-                    <button className="btn btn-outline-secondary w-75">
-                      Buscar evento
-                    </button>
-                  </Link>
-                </div>
-                <Link to="/createsecurity">
-                  <button className="btn btn-outline-secondary w-75">
-                    Crear evento
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div className="row">
-        <div className="col">
-          <div
-            className="card text-bg-light mb-3 text-center"
-            style={cardStyle}
-          >
-            <div className="card-header text-center">Eventos</div>
-            <div className="card-body">
-              <h5 className="card-title">Crea tu evento aqui!</h5>
-              <p className="card-text">
-                Some quick example text to build on the card title and make up
-                the bulk of the card's content.
-              </p>
-              <div className="mt-5">
-                <div>
-                <Link to="/search">
-                    <button className="btn btn-outline-secondary w-75">
-                      Buscar evento
-                    </button>
-                  </Link>
-                </div>
-                <Link to="/createevent">
-                  <button className="btn btn-outline-secondary w-75">
-                    Crear evento
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Columna 2 */}
-        <div className="col-md-6">
-          <div
-            className="card text-bg-light mb-3 text-center"
-            style={cardStyle}
-          >
-            <div className="card-header text-center">Otros</div>
-            <div className="card-body">
-              <h5 className="card-title">Crea tu evento personalizado!</h5>
-              <p className="card-text">
-                Estas aburrido y buscas una o mas personas para llevar a cabo
-                una actividad?
-              </p>
-              <p className="card-text">Pues crea tu propio evento aqui!</p>
-              <div className="p-3">
-                <div>
-                <Link to="/search">
-                    <button className="btn btn-outline-secondary w-75">
-                      Buscar evento
-                    </button>
-                  </Link>
-                </div>
-                <Link to="/createother">
-                  <button className="btn btn-outline-secondary w-75">
-                    Crear evento
-                  </button>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </div>
+        ))}
       </div>
     </div>
   );
