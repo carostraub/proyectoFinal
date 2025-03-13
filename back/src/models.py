@@ -48,7 +48,7 @@ class User(db.Model):
             "edad": self.edad,
             "sexo": self.sexo,
             "genero": self.genero,
-            "profile": self.profilePicture,
+            "profilePicture": self.profilePicture,
             
         }
 

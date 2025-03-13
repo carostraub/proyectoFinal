@@ -23,13 +23,16 @@ export const AuthProvider = ({ children }) => {
                 const token = localStorage.getItem("access_token"); //  Recuperar el token
         
                 if (!token) {
+                    console.log("No hay token disponible, usuario no autenticado");
                     setUser(null);
                     return;
                 }
         
                 const response = await fetch(`${baseURL}/api/profile`, { 
                     method: "GET",
-                    headers: { "Authorization": `Bearer ${token}` }, //  Enviar el token en la cabecera
+                    headers: { 
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json" }, //  Enviar el token en la cabecera y asegura que el backend entienda el formato
                     credentials: "include", 
                 });
         
