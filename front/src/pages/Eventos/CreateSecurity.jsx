@@ -9,7 +9,8 @@ const CreateSecurity= () => {
  const [formData, setFormData] = useState({
     
     nameEvent: "",
-    location: "",
+    locationFrom: "",
+    locationTo:"",
     time: "",
     date: "",
     missingPeople: 0,
@@ -66,12 +67,12 @@ const CreateSecurity= () => {
       }
     });
   };
-
-  const isFormComplete = () => {
-    const { nameEvent, location, time, date, missingPeople, payment, description, sex, gender, ageRange } = formData;
+ 
+ const isFormComplete = () => {
+    const { nameEvent, locationFrom , time, date, missingPeople, payment, description, sex, gender, ageRange, locationTo } = formData;
 
     // Verificar que los campos de texto no estén vacíos
-    if (  !nameEvent || !location || !time || !date || !description || !sex) {
+    if (  !nameEvent || !locationFrom  || !time || !date || !description || !sex  || !locationTo  ) {
       return false;
     }
 
@@ -120,8 +121,8 @@ const CreateSecurity= () => {
               className="form-control"
               id="ubicacion"
               placeholder="...."
-              name="location"
-              value={formData.location}
+              name="locationFrom"
+              value={formData.locationFrom}
               onChange={handleChange}
             />
               <label htmlFor="ubicacion" className="form-label">
@@ -132,8 +133,8 @@ const CreateSecurity= () => {
               className="form-control"
               id="ubicacion"
               placeholder="...."
-              name="location"
-              value={formData.location}
+              name="locationTo"
+              value={formData.locationTo}
               onChange={handleChange}
             />
             <div className="row">

@@ -66,13 +66,13 @@ const CreateSport = () => {
       console.log("Formulario enviado con éxito:", formData);
       try {
         // guardar formulario 
-        token = localStorage.getItem("access_token")
+        let token = localStorage.getItem("access_token")
         const response = await fetch(`${baseURL}/evento`, {
           method: "POST",
-          headers:{
-            "Content-Type":"application/json",
-            Authorization: "Bearer "+token 
-                   },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: "Bearer " + token
+          },
           body: JSON.stringify(formData)
         });
 
@@ -128,7 +128,7 @@ const CreateSport = () => {
     }
 
     // Verificar que el rango de edad sea válido
-    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
+    if (ageRange.edadMin <= 16 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
       return false;
     }
 
