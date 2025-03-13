@@ -95,7 +95,7 @@ def login():
     
     return jsonify({
         "access_token": access_token,
-        "user": user.serialize()  # Enviar también los datos del usuario
+        "user": user.serialize()  #  Enviar también los datos del usuario
     }), 200
 
 
