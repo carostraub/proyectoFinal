@@ -31,7 +31,9 @@ export const Layout = () => {
         <Route path="/createsecurity" element={<PrivateRoute><CreateSecurity /></PrivateRoute>} />
         <Route path="/createother" element={<PrivateRoute><CreateOther /></PrivateRoute>} />
         <Route path="/myevent" element={<PrivateRoute><MyEvent /></PrivateRoute>} />
+
         <Route path="/settings" element={<PrivateRoute><Settings /></PrivateRoute>} /> 
+
         
         {/* <Route path="/" element={<Home />} />
         <Route path="/createevent" element={<CreateEvent />} />

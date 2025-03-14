@@ -372,3 +372,38 @@ def setting(user_id):
         }), 200
     except Exception as e:
         return jsonify({"error": "Error al actualizar perfil", "details": str(e)}), 500
+
+
+
+
+@api.route('/categorias', methods=['POST'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
+# @jwt_required()
+def guardar_categorias():
+    # current_user_id = get_jwt_identity()
+    # user = User.query.get(current_user_id)
+
+    # if not user:
+    #     return jsonify({"error": "Usuario no encontrado"}), 404
+
+ 
+    data = request.get_json()  
+    nueva_categoria=Category(
+        categoria = data.get("categoria"),
+        titulo = data.get("titulo"),
+        description1=data.get("description1"),
+        description2=data.get("description2"),
+        url=data.get("url")
+    )
+
+
+    try:
+        nueva_categoria.save()
+        return jsonify(nueva_categoria.serialize()), 200
+    except Exception as e:
+        return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
+    
+
+
+
+
