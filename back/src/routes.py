@@ -63,7 +63,7 @@ def register():
 
     try:
         new_user.save()
-        access_token = create_access_token(identity=new_user.id) 
+        access_token = create_access_token(identity=(new_user.id)) 
         return jsonify({
             "message": "Usuario registrado exitosamente",
             "user": new_user.serialize(),
@@ -206,8 +206,12 @@ def borrar_evento(evento_id):
 @jwt_required()
 def mi_perfil():
     current_user_id = get_jwt_identity()
-    user = User.query.get(current_user_id)
+    try:
+        current_user_id = int(current_user_id)
+    except ValueError:
+        return jsonify({"error": "ID de usuario inválido"}), 400
 
+    user = User.query.get(current_user_id)
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
 

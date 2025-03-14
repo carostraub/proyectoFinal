@@ -168,6 +168,7 @@ class Category(db.Model):
     titulo= db.Column(db.String, nullable=False)
     description1= db.Column(db.String)
     description2= db.Column(db.String)
+    
 
     eventos = relationship('Evento', back_populates='categoria')
 
@@ -179,6 +180,7 @@ class Category(db.Model):
             "titulo":self.titulo,
             "description1": self.description1,
             "description2": self.description2,
+           
         }
     
     def save(self):
