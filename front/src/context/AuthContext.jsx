@@ -31,17 +31,25 @@ export const AuthProvider = ({ children }) => {
                 const response = await fetch(`${baseURL}/api/profile`, { 
                     method: "GET",
                     headers: { 
-                        "Authorization": `Bearer ${token}`,
-                        "Content-Type": "application/json" }, //  Enviar el token en la cabecera y asegura que el backend entienda el formato
+                        "Authorization": `Bearer ${token}`
+                    },
                     credentials: "include", 
                 });
-        
-                if (!response.ok) {
-                    throw new Error("Usuario no autenticado");
+
+                const text = await response.text();  // Intentamos leer la respuesta
+
+                try {
+                    const data = JSON.parse(text);
+                    if (response.ok) {
+                        setUser(data);
+                    } else {
+                        console.error("Error en autenticación:", data.error || text);
+                        setUser(null);
+                    }
+                } catch (error) {
+                    console.error("Error procesando respuesta:", text);
+                    setUser(null);
                 }
-        
-                const data = await response.json();
-                setUser(data);
             } catch (error) {
                 console.error("Error al verificar usuario:", error);
                 setUser(null);
@@ -49,7 +57,6 @@ export const AuthProvider = ({ children }) => {
                 setLoading(false);
             }
         };
-        
 
         checkUser();
     }, []);
@@ -69,6 +76,7 @@ export const AuthProvider = ({ children }) => {
 
             if (response.ok) {
                 localStorage.setItem("access_token", data.access_token); //  Guardar el token
+                console.log("Token guardado:", localStorage.getItem("access_token"));
                 setUser(data.user);
                 navigate("/"); //Redirige al Home
             } else {
@@ -106,23 +114,41 @@ export const AuthProvider = ({ children }) => {
         }
     };
 
-    //  Función para actualizar perfil (nombre, usuario, contraseña, imagen)
+    //  Función para actualizar perfil (nombre, usuario, contraseña, biografía, imagen)
     const updateProfile = async (profileData) => {
+        if (!user) {
+            console.error("Error: No hay usuario autenticado.");
+            return;
+        }
+
         setLoading(true);
         try {
+            const token = localStorage.getItem("access_token");
+
             const response = await fetch(`${baseURL}/api/setting/${user.id}`, {
                 method: "PATCH",
-                body: profileData,
+                body: profileData, // Aquí pasamos el FormData
+                headers: {
+                    "Authorization": `Bearer ${token}` // No agregamos Content-Type, Fetch lo maneja automáticamente con FormData
+                },
                 credentials: "include",
             });
 
-            const data = await response.json();
+            const text = await response.text();
+            console.log("Respuesta del servidor:", text);
 
-            if (response.ok) {
-                setUser(data.user); // Se actualiza el contexto con el nuevo usuario
-                alert("Perfil actualizado con éxito");
-            } else {
-                alert("Error al actualizar perfil: " + data.error);
+            try {
+                const data = JSON.parse(text);
+                if (response.ok) {
+                    setUser(data.user);
+                    alert("Perfil actualizado con éxito");
+                } else {
+                    console.error("Error al actualizar perfil:", data.error || text);
+                    alert("Error al actualizar perfil: " + (data.error || "Error desconocido"));
+                }
+            } catch (parseError) {
+                console.error("Error en formato JSON:", text);
+                alert("Error en el formato de la respuesta del servidor.");
             }
         } catch (error) {
             console.error("Error al actualizar perfil:", error);
@@ -140,6 +166,7 @@ export const AuthProvider = ({ children }) => {
             });
 
             setUser(null);
+            localStorage.removeItem("access_token");
             navigate("/login");
         } catch (error) {
             console.error("Error en logout:", error);
@@ -152,3 +179,5 @@ export const AuthProvider = ({ children }) => {
         </AuthContext.Provider>
     );
 };
+
+export default AuthProvider;
