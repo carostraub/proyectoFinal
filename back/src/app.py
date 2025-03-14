@@ -33,7 +33,7 @@ Migrate(app, db)
 jwt = JWTManager(app)
 CORS(app, resources={r"/api/*": {"origins": "http://localhost:5173"}}, supports_credentials=True) #el frontend es `http://localhost:5173`
 
-app.route('/')
+@app.route('/')
 def main():
     return jsonify({"message": "REST API FLASK"}), 200
 
