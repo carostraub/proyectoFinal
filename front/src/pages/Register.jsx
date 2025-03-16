@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { baseURL } from "../config/index";
+import { useNavigate } from "react-router-dom";
 
 const Register = () => {
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
-        name: "",
-        username: "",
+        nombre: "",
+        usuario: "",
         email: "",
-        age: "",
+        edad: "",
         password: "",
         profilePicture: null,
-        gender: "",
-        sex: ""
+        genero: "",
+        sexo: ""
     });
 
     const handleChange = (e) => {
@@ -32,14 +34,13 @@ const Register = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        //  FormData para enviar la imagen y los demás datos
         const dataToSend = new FormData();
         for (const key in formData) {
             dataToSend.append(key, formData[key]);
         }
 
         try {
-            const response = await fetch(`${baseURL}/register`, {
+            const response = await fetch(`${baseURL}/api/register`, {  // 🔹 Corregida la URL
                 method: "POST",
                 body: dataToSend
             });
@@ -49,6 +50,7 @@ const Register = () => {
             if (response.ok) {
                 alert("Registro exitoso 🎉");
                 console.log("Usuario registrado:", result);
+                navigate("/login"); //Redirige a login
             } else {
                 alert("Error en el registro: " + result.error);
             }
@@ -63,36 +65,33 @@ const Register = () => {
             <h2>Registro</h2>
             <form onSubmit={handleSubmit}>
                 <div className="row">
-                    <div className="col-md-6 ">
+                    <div className="col-md-6">
                         <h6>Nombre completo</h6>
-                        <input className="mb-3" type="text" name="name" placeholder="Nombre" value={formData.name} onChange={handleChange} required />
+                        <input className="mb-3" type="text" name="nombre" placeholder="Nombre" value={formData.nombre} onChange={handleChange} required />
                         <h6>Nombre usuario</h6>
-                        <input className="mb-3" type="text" name="username" placeholder="Usuario" value={formData.username} onChange={handleChange} required />
+                        <input className="mb-3" type="text" name="usuario" placeholder="Usuario" value={formData.usuario} onChange={handleChange} required />
                         <h6>Email</h6>
                         <input className="mb-3" type="email" name="email" placeholder="Correo Electrónico" value={formData.email} onChange={handleChange} required />
                         <h6>Edad</h6>
-                        <input className="mb-3" type="number" name="age" placeholder="Edad" value={formData.age} onChange={handleChange} required min="16" />
+                        <input className="mb-3" type="number" name="edad" placeholder="Edad" value={formData.edad} onChange={handleChange} required min="16" />
                     </div>
                     <div className="col-md-6">
                         <h6>Contraseña</h6>
                         <input className="mb-3" type="password" name="password" placeholder="Contraseña" value={formData.password} onChange={handleChange} required />
 
-                        {/* Input para subir foto de perfil */}
-                        <h6>Selecciona una foto donde se vea tu cara </h6>
+                        <h6>Selecciona una foto de perfil</h6>
                         <input className="mb-3" type="file" name="profilePicture" accept="image/*" onChange={handleFileChange} required />
 
-                        {/* Selección de sexo */}
                         <h6>Sexo</h6>
-                        <select className="mb-3" name="sex" value={formData.sex} onChange={handleChange} required>
+                        <select className="mb-3" name="sexo" value={formData.sexo} onChange={handleChange} required>
                             <option value="">Selecciona tu sexo</option>
                             <option value="Masculino">Masculino</option>
                             <option value="Femenino">Femenino</option>
                             <option value="Intersexual">Intersexual</option>
                         </select>
 
-                        {/* Selección de género */}
                         <h6>Género</h6>
-                        <select className="mb-3" name="gender" value={formData.gender} onChange={handleChange} required>
+                        <select className="mb-3" name="genero" value={formData.genero} onChange={handleChange} required>
                             <option value="">Selecciona tu género</option>
                             <option value="Hombre">Hombre</option>
                             <option value="Mujer">Mujer</option>
@@ -101,7 +100,6 @@ const Register = () => {
                         </select>
                     </div>
                 </div>
-
 
                 <button className="btn btn-primary" type="submit">Registrarse</button>
             </form>
