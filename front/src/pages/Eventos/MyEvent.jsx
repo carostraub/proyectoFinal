@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
-<<<<<<< Updated upstream
 import { baseURL } from "../../config/";
-=======
-import { baseURL } from "../../config";
->>>>>>> Stashed changes
 
 const MyEvents = () => {
   const { user } = useAuth();
