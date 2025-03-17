@@ -6,6 +6,7 @@ from werkzeug.security import generate_password_hash
 from flask import Blueprint, request, jsonify
 from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identity
 from models import User, Evento, participantes_table, db, Estatus, Category
+from datetime import datetime
 
 
 api = Blueprint("api", __name__)
@@ -111,16 +112,16 @@ def crear_evento():
 
     data = request.get_json()
 
-    required_fields = ["nombre_evento", "ubicacion", "fecha", "hora", "category"]
+    required_fields = ["nameEvent", "location", "date", "time", "category"]
     for field in required_fields:
         if field not in data:
             return jsonify({"error": f"Falta el campo requerido: {field}"}), 400
 
     # Validaciones de edad, sexo y género
-    edad_min = data.get("edad_min")
-    edad_max = data.get("edad_max")
-    sexo_permitido = data.get("sexo_permitido", "No importa")
-    genero_permitido = data.get("genero_permitido", "No importa")
+    edad_min = data.get("ageRange.edadMin")
+    edad_max = data.get("ageRange.edadMax")
+    sexo_permitido = data.get("sex", "No importa")
+    genero_permitido = data.get("gender", "No importa")
 
     if edad_min and edad_max and edad_min > edad_max:
         return jsonify({"error": "La edad mínima no puede ser mayor que la edad máxima"}), 400
@@ -129,13 +130,16 @@ def crear_evento():
     if not category:
         return jsonify({"error": "Categoría no válida"}), 400
 
+    hora_str=data["time"]
+    hora_obj = datetime.strptime(hora_str, "%H:%M:%S").time()
+
     nuevo_evento = Evento(
         organizador_id=current_user_id,
-        nombre_evento=data["nombre_evento"],
-        ubicacion=data["ubicacion"],
-        fecha=data["fecha"],
-        hora=data["hora"],
-        dinero=data.get("dinero"),
+        nombre_evento=data["nameEvent"],
+        ubicacion=data["location"],
+        fecha=data["date"],
+        hora=hora_obj,
+        dinero=data.get("payment"),
         category=data["category"],
         description=data.get("description"),
         edad_min=edad_min,
@@ -444,6 +448,20 @@ def guardar_categorias():
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
     
 
+@api.route('/categories', methods=['GET'])
+# @jwt_required()
+def get_categories():
+    # current_user_id = int(get_jwt_identity())
+    # try:
+    #     current_user_id = int(current_user_id)
+    # except ValueError:
+    #     return jsonify({"error": "ID de usuario inválido"}), 400
 
+    categories = Category.query.all()
+    if categories == []:
+        return jsonify({"error": "No existen categorias"}), 404
+    resultado=list(map(lambda item:item.serialize(),categories))
+
+    return jsonify(resultado), 200
 
 
