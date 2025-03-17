@@ -218,6 +218,32 @@ def mi_perfil():
     return jsonify(user.serialize()), 200
 
 
+@api.route('/profile', methods=['PATCH'])
+@jwt_required()
+def actualizar_biografia():
+    current_user_id = get_jwt_identity()
+    user = User.query.get(current_user_id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    new_biography = request.form.get("biography")  # Recibir la biografía
+
+    if new_biography is None:
+        return jsonify({"error": "No se proporcionó una biografía"}), 400
+
+    user.biography = new_biography  #  Actualizar la biografía
+
+    try:
+        user.update()
+        return jsonify({
+            "message": "Biografía actualizada con éxito",
+            "user": user.serialize()
+        }), 200
+    except Exception as e:
+        return jsonify({"error": "Error al actualizar la biografía", "details": str(e)}), 500
+
+
 
 @api.route('/eventos_disponibles', methods=['POST'])
 @cross_origin(origins="http://localhost:5173", supports_credentials=True)

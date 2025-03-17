@@ -10,3 +10,14 @@ ir a la base de datos en pgAdmin (la página o la aplicación) y crear una base 
 flask db migrate
 
 flask db upgrade
+
+Para echar a andar backend 
+En otro terminal (no es necesario cerrar el otro) 
+(Para ingresar datos a la base de datos recuerda tener abierto el pgAdmin)
+cd back
+pipenv shell
+pipenv run start
+
+Para echar a andar front
+(otro terminal, no es necesario cerrar los otros dos)
+npm run dev 

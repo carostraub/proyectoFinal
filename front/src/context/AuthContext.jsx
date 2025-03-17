@@ -168,6 +168,63 @@ export const AuthProvider = ({ children }) => {
     }
 };
 
+ //Función para cambiar la biografia, apunta a diferente endpoint por lo que el fetch es distinto
+ const updateBio = async (newBio) => {
+  if (!user) {
+      console.error("Error: No hay usuario autenticado.");
+      return;
+  }
+
+  if (!newBio) {
+      console.error("Error: La biografía está vacía.");
+      return;
+  }
+
+  const formData = new FormData();
+  formData.append("biography", newBio);
+
+  console.log("Enviando biografía:", newBio); // Verifica lo que se está enviando
+
+  setLoading(true);
+  try {
+      const token = localStorage.getItem("access_token");
+
+      const response = await fetch(`${baseURL}/api/profile`, {
+          method: "PATCH",
+          body: formData,
+          headers: {
+              Authorization: `Bearer ${token}`,
+          },
+          credentials: "include",
+      });
+
+      const text = await response.text();
+      console.log("Respuesta del servidor:", response, text);
+
+      let data;
+      try {
+          data = JSON.parse(text);
+      } catch (parseError) {
+          console.error("Error en formato JSON:", parseError);
+          alert("Error en el formato de la respuesta del servidor.");
+          return;
+      }
+
+      if (response.ok && data?.user) {
+          setUser(data.user);
+          alert("Biografía actualizada con éxito");
+      } else {
+          console.error("Error al actualizar biografía:", data?.error || "Error desconocido");
+          alert("Error al actualizar biografía: " + (data?.error || "Error desconocido"));
+      }
+  } catch (error) {
+      console.error("Error al actualizar biografía:", error);
+      alert("No se pudo conectar con el servidor. Inténtalo más tarde.");
+  } finally {
+      setLoading(false);
+  }
+};
+
 
   // Función para cerrar sesión
   const logout = async () => {
@@ -187,7 +244,7 @@ export const AuthProvider = ({ children }) => {
 
   return (
     <AuthContext.Provider
-      value={{ user, loading, login, register, updateProfile, logout }}
+      value={{ user, loading, login, register, updateProfile, updateBio, logout }}
     >
       {children}
     </AuthContext.Provider>

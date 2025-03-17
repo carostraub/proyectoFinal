@@ -1,32 +1,27 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
 const Profile = () => {
-  const { user, updateProfile } = useAuth(); // Obtener el usuario desde el contexto
+  const { user, updateBio } = useAuth(); // Obtener el usuario y la nueva función updateBio
   const [bio, setBio] = useState(user?.biography || ""); // Estado local para la biografía
   const [isEditing, setIsEditing] = useState(false); // Estado para alternar entre vista y edición
 
   const handleSave = async () => {
-    const formData = new FormData();
-    formData.append("biography", bio); // Agrega la biografía al formData
-
-    await updateProfile(formData); // Llama a la función del AuthContext para actualizar
+    await updateBio(bio); //  
     setIsEditing(false); // Desactiva el modo de edición después de guardar
   };
 
-
   return (
     <div className="container mt-5">
-      <div className="card text-center shadow-lg p-4">
+      <div className="card text-center border shadow-lg p-4">
         {/* Nombre del Usuario como título */}
         <h2 className="mt-3">{user?.usuario || "Usuario Desconocido"}</h2>
         <div className="row">
           <div className="col-md-6 col-12">
-
             {/* Foto de Perfil */}
             <img
               src={user?.profilePicture || "https://via.placeholder.com/150"}
-              onError={(e) => { e.target.onerror = null }}
+              onError={(e) => { e.target.onerror = null; }}
               alt="Foto de perfil"
               className="rounded-circle mx-auto d-block"
               style={{ width: "200px", height: "200px", objectFit: "cover" }}
@@ -34,7 +29,7 @@ const Profile = () => {
           </div>
           <div className="col-md-6 col-12">
             <h2 className="mt-3">{user?.nombre || "Usuario desconocido"}</h2>
-            <h4 className="mt-3">{user?.edad || "Usuario desconocido"} años </h4>
+            <h4 className="mt-3">{user?.edad || "Usuario desconocido"} años</h4>
             {/* Biografía editable solo si el usuario es dueño del perfil */}
             {isEditing ? (
               <textarea
@@ -58,9 +53,7 @@ const Profile = () => {
                 </button>
               )
             )}
-
           </div>
-
         </div>
       </div>
     </div>
