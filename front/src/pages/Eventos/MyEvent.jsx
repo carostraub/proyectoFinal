@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
+<<<<<<< Updated upstream
 import { baseURL } from "../../config/";
+=======
+import { baseURL } from "../../config";
+>>>>>>> Stashed changes
 
 const MyEvents = () => {
   const { user } = useAuth();
@@ -40,14 +44,17 @@ const MyEvents = () => {
   const handlePostulantAction = async (eventId, userId, action) => {
     try {
       const token = localStorage.getItem("access_token");
-      const response = await fetch(`${baseURL}/api/gestionar_postulacion/${eventId}/${userId}`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ estatus: action }),
-      });
+      const response = await fetch(
+        `${baseURL}/api/gestionar_postulacion/${eventId}/${userId}`,
+        {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ estatus: action }),
+        }
+      );
 
       const data = await response.json();
       if (response.ok) {
@@ -65,7 +72,9 @@ const MyEvents = () => {
   };
 
   const handleDeleteEvent = async (eventId) => {
-    const confirmDelete = window.confirm("¿Estás seguro de que quieres eliminar este evento?");
+    const confirmDelete = window.confirm(
+      "¿Estás seguro de que quieres eliminar este evento?"
+    );
     if (!confirmDelete) return;
 
     try {
@@ -100,7 +109,9 @@ const MyEvents = () => {
             {events.map((event) => (
               <li
                 key={event.id}
-                className={`list-group-item ${selectedEvent?.id === event.id ? "active" : ""}`}
+                className={`list-group-item ${
+                  selectedEvent?.id === event.id ? "active" : ""
+                }`}
                 onClick={() => handleSelectEvent(event)}
                 style={{ cursor: "pointer" }}
               >
@@ -119,9 +130,16 @@ const MyEvents = () => {
                 {/* Filtros */}
                 <div className="col-md-6">
                   <h6>Filtros seleccionados:</h6>
-                  <p><strong>Género:</strong> {selectedEvent.genero_permitido}</p>
-                  <p><strong>Sexo:</strong> {selectedEvent.sexo_permitido}</p>
-                  <p><strong>Rango de edad:</strong> {selectedEvent.edad_min} - {selectedEvent.edad_max}</p>
+                  <p>
+                    <strong>Género:</strong> {selectedEvent.genero_permitido}
+                  </p>
+                  <p>
+                    <strong>Sexo:</strong> {selectedEvent.sexo_permitido}
+                  </p>
+                  <p>
+                    <strong>Rango de edad:</strong> {selectedEvent.edad_min} -{" "}
+                    {selectedEvent.edad_max}
+                  </p>
                 </div>
 
                 {/* Ubicación, Fecha y Hora */}
@@ -146,13 +164,25 @@ const MyEvents = () => {
                         <p>Edad: {postulant.edad}</p>
                         <button
                           className="btn btn-success btn-sm me-2"
-                          onClick={() => handlePostulantAction(selectedEvent.id, postulant.id, "PARTICIPANTE")}
+                          onClick={() =>
+                            handlePostulantAction(
+                              selectedEvent.id,
+                              postulant.id,
+                              "PARTICIPANTE"
+                            )
+                          }
                         >
                           Aceptar
                         </button>
                         <button
                           className="btn btn-danger btn-sm"
-                          onClick={() => handlePostulantAction(selectedEvent.id, postulant.id, "RECHAZADO")}
+                          onClick={() =>
+                            handlePostulantAction(
+                              selectedEvent.id,
+                              postulant.id,
+                              "RECHAZADO"
+                            )
+                          }
                         >
                           Rechazar
                         </button>
