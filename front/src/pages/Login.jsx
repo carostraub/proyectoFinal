@@ -54,7 +54,7 @@ const Login = () => {
           Confirmar datos
         </label>
       </div>
-      <button type="submit" className="btn btn-primary">
+      <button type="submit" className="btn btn-custom">
         Iniciar sesión
       </button>
     </form>

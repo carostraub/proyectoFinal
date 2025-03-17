@@ -86,7 +86,7 @@ const Search = () => {
   return (
     <div className="container mt-2">
       {eventos.map((item, index) => (
-        <div className="card mb-5" key={index}>
+        <div className="card mb-5 border" key={index}>
           <div className="card-header">{item.nombre_evento}</div>
           <div className="card-body">
             <div className="row">
@@ -98,8 +98,8 @@ const Search = () => {
               </div>
               <div className="col-3">
                 <h5 className="card-title">Organizador: {item.organizador}</h5>
-                <a href="#" className="btn btn-outline-secondary">
-                  Formar parte
+                <a href="#" className="btn btn-custom">
+                  Postular
                 </a>
               </div>
             </div>

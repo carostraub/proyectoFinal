@@ -332,7 +332,7 @@ const CreateOther = () => {
         </div>
       </div>
       <div className="mt-5">
-        <button className="btn btn-outline-secondary w-50" onClick={(e) => handleSubmit(e)}>Crear Evento</button>
+        <button className="btn btn-custom w-50" onClick={(e) => handleSubmit(e)}>Crear Evento</button>
       </div>
     </div>
   );

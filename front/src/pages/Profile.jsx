@@ -49,11 +49,11 @@ const Profile = () => {
             {/* Botones para editar y guardar */}
             {user && user.id === user?.id && (
               isEditing ? (
-                <button className="btn btn-success mt-3" onClick={handleSave}>
+                <button className="btn btn-custom mt-3" onClick={handleSave}>
                   Guardar cambios
                 </button>
               ) : (
-                <button className="btn btn-primary mt-3" onClick={() => setIsEditing(true)}>
+                <button className="btn btn-custom mt-3" onClick={() => setIsEditing(true)}>
                   Editar Biografía
                 </button>
               )

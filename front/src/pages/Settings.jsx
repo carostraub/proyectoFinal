@@ -113,7 +113,7 @@ const Settings = () => {
         </div>
 
         <div className="col-12 d-flex justify-content-end mt-5">
-          <button type="submit" className="btn bg-body-secondary w-50 p-3">
+          <button type="submit" className="btn btn-custom  w-50 p-3">
             Guardar cambios
           </button>
         </div>

@@ -7,15 +7,18 @@ const NavBar = () => {
   const location = useLocation();
 
   return (
-    <nav className="navbar navbar-expand-lg bg-body-tertiary">
-      <div className="container-fluid">
-      <Link className="navbar-brand" to="/">
+    <nav id="navbar" className="navbar navbar-expand-lg bg-body-tertiary custom-navbar">
+      <div className="container-fluid d-flex justify-content-between">
+        {/* Logo alineado a la izquierda */}
+        <Link className="navbar-brand" to="/">
           <img 
             src="/LogoCrewUp.png"  
             alt="CrewUp Logo" 
             style={{ height: "40px", width: "auto" }} 
           />
         </Link>
+
+        {/* Botón de colapsar en dispositivos pequeños */}
         <button
           className="navbar-toggler"
           type="button"
@@ -28,15 +31,11 @@ const NavBar = () => {
           <span className="navbar-toggler-icon"></span>
         </button>
 
-        <div className="collapse navbar-collapse" id="navbarSupportedContent">
-          <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-
-            {/*  Si el usuario está autenticado, mostrar estas opciones */}
+        {/* Menú de navegación alineado a la derecha */}
+        <div className="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
+          <ul className="navbar-nav mb-2 mb-lg-0">
             {user ? (
               <>
-                <li className="nav-item">
-                  <Link className="nav-link active" to="/">Home</Link>
-                </li>
                 <li className="nav-item">
                   <Link className="nav-link" to="/createevent">Crear evento</Link>
                 </li>
@@ -50,7 +49,7 @@ const NavBar = () => {
                   >
                     Opciones
                   </a>
-                  <ul className="dropdown-menu">
+                  <ul className="dropdown-menu dropdown-menu-start">
                     <li>
                       <Link className="dropdown-item" to="/profile">Perfil</Link>
                     </li>
@@ -58,7 +57,7 @@ const NavBar = () => {
                       <Link className="dropdown-item" to="/settings">Configuración</Link>
                     </li>
                     <li>
-                      <button className="dropdown-item btn btn-danger btn-sm my-1" onClick={logout}>
+                      <button className="dropdown-item" onClick={logout}>
                         Logout
                       </button>
                     </li>
@@ -66,7 +65,6 @@ const NavBar = () => {
                 </li>
               </>
             ) : (
-              //  Si el usuario NO está autenticado, mostrar estas opciones
               <>
                 {location.pathname !== "/login" && (
                   <li className="nav-item">
@@ -80,7 +78,6 @@ const NavBar = () => {
                 )}
               </>
             )}
-
           </ul>
         </div>
       </div>

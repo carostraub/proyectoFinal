@@ -13,7 +13,7 @@ const MyEvent = () => {
           <p>Lugar: Rancho Rossi, La Serena</p>
           <p>Fecha: 12 de abril - Hora: 19:30</p>
         </p>
-        <a class="btn btn-secondary">Eliminar evento</a>
+        <a class="btn btn-custom">Eliminar evento</a>
       </div>
       <div class="card-footer text-body-secondary">Creado hace 2 días</div>
     </div>

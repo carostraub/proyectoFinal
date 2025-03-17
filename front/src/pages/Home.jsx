@@ -56,8 +56,8 @@ const Home = () => {
   }, [])
 
   return (
-    <div className="container mt-4">
-      <div className="row">
+    <div id="home" className="container d-flex flex-column align-items-center justify-content-center min-vh-100  mt-4">
+      <div className="row justify-content-center">
         {listCategories.map((item) => (
           <div className="col-sm-6 col-md-6 text-center" key={item.id}>
             <CardsCategories
