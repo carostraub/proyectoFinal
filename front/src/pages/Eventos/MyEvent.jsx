@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { useAuth } from "../context/AuthContext";
-import { baseURL } from "../config/index";
+import { useAuth } from "../../context/AuthContext";
+import { baseURL } from "../../config/";
 
 const MyEvents = () => {
   const { user } = useAuth();
