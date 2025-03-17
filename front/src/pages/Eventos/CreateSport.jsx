@@ -32,7 +32,9 @@ const CreateSport = () => {
     "Voleibol"
   ];
 
+  
   const [formData, setFormData] = useState({
+    category:1,
     nameSport: "",
     nameEvent: "",
     location: "",
@@ -67,7 +69,8 @@ const CreateSport = () => {
       try {
         // guardar formulario 
         let token = localStorage.getItem("access_token")
-        const response = await fetch(`${baseURL}/evento`, {
+        console.log(token)
+        const response = await fetch("http://localhost:5000/api/evento", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -75,12 +78,12 @@ const CreateSport = () => {
           },
           body: JSON.stringify(formData)
         });
-
+console.log(response)
         if (response.ok) {
           alert("Evento creado de forma exitosa! 🎉");
 
         } else {
-          alert("Error al crear evento: " + result.error);
+          alert("Error al crear evento: " + response.error);
         }
       } catch (error) {
         console.log(error)
