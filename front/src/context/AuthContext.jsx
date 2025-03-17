@@ -116,56 +116,58 @@ export const AuthProvider = ({ children }) => {
 
   const updateProfile = async (profileData) => {
     if (!user) {
-      console.error("Error: No hay usuario autenticado.");
-      return;
+        console.error("Error: No hay usuario autenticado.");
+        return;
     }
 
     if (!profileData) {
-      console.error("Error: No se proporcionaron datos de perfil.");
-      return;
-    }
+        console.error("Error: No se proporcionaron datos de perfil.");
+        return;
+      }
+      
+      console.log("Enviando datos de perfil:", [...profileData.entries()]); // Ver datos antes de enviarlos
+      
 
     setLoading(true);
     try {
-      const token = localStorage.getItem("access_token");
+        const token = localStorage.getItem("access_token");
 
-      const response = await fetch(`${baseURL}/api/setting/${user.id}`, {
-        method: "PATCH",
-        body: profileData, // Enviamos FormData directamente
-        headers: {
-          Authorization: `Bearer ${token}`, // No se añade Content-Type con FormData
-        },
-        credentials: "include",
-      });
+        const response = await fetch(`${baseURL}/api/setting/${user.id}`, {
+            method: "PATCH",
+            body: profileData, // Enviamos FormData directamente
+            headers: {
+                Authorization: `Bearer ${token}`, // No se añade Content-Type con FormData
+            },
+            credentials: "include",
+        });
 
-      let data;
-      try {
-        data = await response.json();
-      } catch (parseError) {
-        console.error("Error en formato JSON:", parseError);
-        alert("Error en el formato de la respuesta del servidor.");
-        return;
-      }
+        const text = await response.text();
+        console.log("Respuesta del servidor:", response, text);  // 🛠 Agrega esto para ver la respuesta real
 
-      if (response.ok && data?.user) {
-        setUser(data.user);
-        alert("Perfil actualizado con éxito");
-      } else {
-        console.error(
-          "Error al actualizar perfil:",
-          data?.error || "Error desconocido"
-        );
-        alert(
-          "Error al actualizar perfil: " + (data?.error || "Error desconocido")
-        );
-      }
+        let data;
+        try {
+            data = JSON.parse(text);
+        } catch (parseError) {
+            console.error("Error en formato JSON:", parseError);
+            alert("Error en el formato de la respuesta del servidor.");
+            return;
+        }
+
+        if (response.ok && data?.user) {
+            setUser(data.user);
+            alert("Perfil actualizado con éxito");
+        } else {
+            console.error("Error al actualizar perfil:", data?.error || "Error desconocido");
+            alert("Error al actualizar perfil: " + (data?.error || "Error desconocido"));
+        }
     } catch (error) {
-      console.error("Error al actualizar perfil:", error);
-      alert("No se pudo conectar con el servidor. Inténtalo más tarde.");
+        console.error("Error al actualizar perfil:", error);
+        alert("No se pudo conectar con el servidor. Inténtalo más tarde.");
     } finally {
-      setLoading(false);
+        setLoading(false);
     }
-  };
+};
+
 
   // Función para cerrar sesión
   const logout = async () => {

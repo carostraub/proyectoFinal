@@ -63,7 +63,7 @@ def register():
 
     try:
         new_user.save()
-        access_token = create_access_token(identity=(new_user.id)) 
+        access_token = create_access_token(identity=str(new_user.id)) 
         return jsonify({
             "message": "Usuario registrado exitosamente",
             "user": new_user.serialize(),
@@ -91,7 +91,7 @@ def login():
     if not user.verify_password(password):
         return jsonify({ "error": "Datos incorrectos"}), 400
     
-    access_token = create_access_token(identity=(user.id))
+    access_token = create_access_token(identity=str(user.id))
     
     return jsonify({
         "access_token": access_token,
@@ -103,7 +103,7 @@ def login():
 @api.route('/evento', methods=['POST'])
 @jwt_required()
 def crear_evento():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
     
     if not user:
@@ -156,7 +156,7 @@ def crear_evento():
 @api.route('/evento/<int:evento_id>', methods=['GET'])
 @jwt_required()
 def mi_evento(evento_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
     evento = Evento.query.get(evento_id)
     
@@ -190,7 +190,7 @@ def mi_evento(evento_id):
 @api.route('/evento/<int:evento_id>', methods=['DELETE'])
 @jwt_required()
 def borrar_evento(evento_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     evento = Evento.query.get(evento_id)
     
     if not evento:
@@ -205,7 +205,7 @@ def borrar_evento(evento_id):
 @api.route('/profile', methods=['GET'])
 @jwt_required()
 def mi_perfil():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     try:
         current_user_id = int(current_user_id)
     except ValueError:
@@ -223,7 +223,7 @@ def mi_perfil():
 @cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def eventos_disponibles():
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
 
     if not user:
@@ -261,7 +261,7 @@ def eventos_disponibles():
 @cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def postular_evento(evento_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
     evento = Evento.query.get(evento_id)
 
@@ -298,7 +298,7 @@ def postular_evento(evento_id):
 @cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def gestionar_postulacion(evento_id, user_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     evento = Evento.query.get(evento_id)
     user = User.query.get(user_id)
 
@@ -334,35 +334,33 @@ def gestionar_postulacion(evento_id, user_id):
 @api.route('/setting/<int:user_id>', methods=['PATCH'])
 @jwt_required()
 def setting(user_id):
-    current_user_id = get_jwt_identity()
+    current_user_id = int(get_jwt_identity())
     user = User.query.get(user_id)
 
-
-    if user is None:
+    if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
+
     if user.id != current_user_id:
         return jsonify({"error": "No puedes editar este perfil"}), 400
 
-    
-    new_username = request.form.get("usuario")
+    # Obtener los valores del formulario
+    new_username = request.form.get("usuario", "").strip()
     new_password = request.form.get("password")
     new_profile_picture = request.files.get("profilePicture")
 
-    
+    # Validar que no se envíen valores vacíos
     if new_username:
         user.usuario = new_username
 
-    
-    if new_password:
+    if new_password and new_password.strip() != "":
         user.password = generate_password_hash(new_password)
 
     if new_profile_picture:
         try:
             upload_result = cloudinary.uploader.upload(new_profile_picture, folder="crewup_profiles")
-            user.profilePicture = upload_result["secure_url"] 
+            user.profilePicture = upload_result["secure_url"]
         except Exception as e:
             return jsonify({"error": "Error al subir la imagen", "details": str(e)}), 500
-
 
     try:
         user.update()
@@ -376,11 +374,12 @@ def setting(user_id):
 
 
 
+
 @api.route('/categorias', methods=['POST'])
 @cross_origin(origins="http://localhost:5173", supports_credentials=True)
 # @jwt_required()
 def guardar_categorias():
-    # current_user_id = get_jwt_identity()
+    # current_user_id = int(get_jwt_identity())
     # user = User.query.get(current_user_id)
 
     # if not user:

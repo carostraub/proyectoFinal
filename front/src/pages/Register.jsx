@@ -40,7 +40,7 @@ const Register = () => {
         }
 
         try {
-            const response = await fetch(`${baseURL}/api/register`, {  // 🔹 Corregida la URL
+            const response = await fetch(`${baseURL}/api/register`, {  //  Corregida la URL
                 method: "POST",
                 body: dataToSend
             });

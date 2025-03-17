@@ -26,18 +26,30 @@ const Settings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (formdata.password && formdata.password !== formdata.confirmPassword) {
       alert("Las contraseñas no coinciden.");
       return;
     }
 
     const dataSend = new FormData();
-    dataSend.append("usuario", formdata.usuario);
+
+    // Agregar solo los campos que fueron cambiados
+    if (formdata.usuario && formdata.usuario.trim() !== user.usuario) {
+      dataSend.append("usuario", formdata.usuario);
+    }
+
     if (formdata.password) {
       dataSend.append("password", formdata.password);
     }
+
     if (formdata.profilePicture) {
       dataSend.append("profilePicture", formdata.profilePicture);
+    }
+
+    if ([...dataSend.entries()].length === 0) {
+      alert("No has ingresado ningún dato para actualizar.");
+      return;
     }
 
     await updateProfile(dataSend);
@@ -56,7 +68,6 @@ const Settings = () => {
             placeholder="Nuevo nombre de usuario"
             value={formdata.usuario}
             onChange={handleChange}
-            required
           />
 
           <label htmlFor="password">Cambiar contraseña</label>
