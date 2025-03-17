@@ -57,8 +57,8 @@ const Settings = () => {
 
   return (
     <form onSubmit={handleSubmit} className="container-fluid">
-      <div className="row">
-        <div className="col-6">
+      <div className="row m-3">
+        <div className="col-md-6 col-12">
           <label htmlFor="username">Cambiar usuario</label>
           <input
             type="text"
@@ -93,7 +93,7 @@ const Settings = () => {
           />
         </div>
 
-        <div className="col-6">
+        <div className="col-md-6 col-12">
           <label htmlFor="file">Cambiar foto de perfil</label>
           <input
             type="file"
@@ -112,8 +112,8 @@ const Settings = () => {
           </p>
         </div>
 
-        <div className="col-12 d-flex justify-content-end mt-5">
-          <button type="submit" className="btn btn-custom  w-50 p-3">
+        <div className="col-12 d-flex justify-content-center mt-5">
+          <button type="submit" className="btn btn-custom  w-25 p-3">
             Guardar cambios
           </button>
         </div>
