@@ -39,6 +39,9 @@ const NavBar = () => {
                 <li className="nav-item">
                   <Link className="nav-link" to="/createevent">Crear evento</Link>
                 </li>
+                <li className="nav-item">
+                  <Link className="nav-link" to="/myevent">Mis eventos</Link>
+                </li>
                 <li className="nav-item dropdown">
                   <a
                     className="nav-link dropdown-toggle"

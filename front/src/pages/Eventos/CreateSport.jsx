@@ -32,9 +32,9 @@ const CreateSport = () => {
     "Voleibol"
   ];
 
-  
+
   const [formData, setFormData] = useState({
-    category:1,
+    category: 1,
     nameSport: "",
     nameEvent: "",
     location: "",
@@ -70,15 +70,16 @@ const CreateSport = () => {
         // guardar formulario 
         let token = localStorage.getItem("access_token")
         console.log(token)
-        const response = await fetch("http://localhost:5000/api/evento", {
+        const response = await fetch(`${baseURL}/api/evento`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
             Authorization: "Bearer " + token
           },
-          body: JSON.stringify(formData)
+          body: JSON.stringify(formData),
+          mode: 'cors' //  Esto hace que el request use CORS
         });
-console.log(response)
+        console.log(response)
         if (response.ok) {
           alert("Evento creado de forma exitosa! 🎉");
 
@@ -153,9 +154,10 @@ console.log(response)
                 id="floatingSelect"
                 aria-label="Floating label select example"
                 name="nameSport"
+                value={formData.nameSport} // Ahora React controla el valor
                 onChange={handleChange}
               >
-                <option selected>...</option>
+                <option value="">...</option> {/* En lugar de selected, usamos value="" ya que React no le gusta selected */}
                 {sports.map((sport, index) => (
                   <option key={index} value={sport}>
                     {sport}

@@ -32,3 +32,9 @@ h5 {
 .card-header {
   color: #3366cc;
 }
+.list-group-item.selected {
+  background-color: #3366cc; 
+  color: white; 
+  font-weight: bold; 
+}
+

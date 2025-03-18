@@ -102,6 +102,7 @@ def login():
 
 
 @api.route('/evento', methods=['POST'])
+@cross_origin()
 @jwt_required()
 def crear_evento():
     current_user_id = int(get_jwt_identity())
@@ -130,8 +131,14 @@ def crear_evento():
     if not category:
         return jsonify({"error": "Categoría no válida"}), 400
 
-    hora_str=data["time"]
-    hora_obj = datetime.strptime(hora_str, "%H:%M:%S").time()
+    hora_str = data["time"]
+    try:
+        if len(hora_str) == 5:  # Formato "HH:MM"
+            hora_obj = datetime.strptime(hora_str, "%H:%M").time()
+        else:  # Formato "HH:MM:SS"
+            hora_obj = datetime.strptime(hora_str, "%H:%M:%S").time()
+    except ValueError:
+        return jsonify({"error": "Formato de hora no válido"}), 400
 
     nuevo_evento = Evento(
         organizador_id=current_user_id,
@@ -149,7 +156,8 @@ def crear_evento():
     )
 
     try:
-        nuevo_evento.save()
+        db.session.add(nuevo_evento)
+        db.session.commit()
         return jsonify(nuevo_evento.serialize()), 200
     except Exception as e:
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500

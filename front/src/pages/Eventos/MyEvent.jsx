@@ -105,9 +105,8 @@ const MyEvents = () => {
             {events.map((event) => (
               <li
                 key={event.id}
-                className={`list-group-item ${
-                  selectedEvent?.id === event.id ? "active" : ""
-                }`}
+                className={`list-group-item ${selectedEvent?.id === event.id ? "selected" : ""
+                  }`}
                 onClick={() => handleSelectEvent(event)}
                 style={{ cursor: "pointer" }}
               >
@@ -118,7 +117,12 @@ const MyEvents = () => {
         </div>
         <div className="col-md-8">
           {selectedEvent && (
-            <div className="card p-4 shadow">
+            <div className="card border p-4">
+              {/* Botón de cierre (X) en la esquina superior derecha */}
+              <button
+                className="btn-close position-absolute top-0 end-0 m-2"
+                onClick={() => setSelectedEvent(null)}
+              />
               <h3>{selectedEvent.nombre_evento}</h3>
               <h5 className="text-muted">{selectedEvent.category}</h5>
 
