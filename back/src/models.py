@@ -118,8 +118,8 @@ class Evento(db.Model):
             "id": self.id,
             "nombre_evento": self.nombre_evento,
             "ubicacion": self.ubicacion,
-            "fecha": self.fecha,
-            "hora": self.hora,
+            "fecha": self.fecha.strftime("%d/%m/%Y"),  # Día/Mes/Año
+            "hora": self.hora.strftime("%H:%M:%S"),  # Convertir hora a string
             "dinero": self.dinero,
             "organizador": self.organizador_user.serialize_basic() if self.organizador_user else None,
             "category": self.categoria.titulo if self.categoria else None,
@@ -129,7 +129,8 @@ class Evento(db.Model):
             "sexo_permitido": self.sexo_permitido,
             "genero_permitido": self.genero_permitido,
             "participantes": [usuario.serialize_basic() for usuario in self.participantes]
-        }
+    }
+
     
     def serialize_security(self):
         return {

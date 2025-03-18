@@ -189,19 +189,27 @@ def mi_evento(evento_id):
         return jsonify({"error": "Este no es tu evento"}), 400
 
     response_data = {
+        "id": evento.id,
         "nombre_evento": evento.nombre_evento,
-        "categoria": evento.category,
+        "categoria": evento.categoria.titulo,  
         "ubicacion": evento.ubicacion,
-        "fecha_hora": evento.fecha_hora,
+        "fecha": evento.fecha.strftime("%d/%m/%Y"),  
+        "hora": evento.hora.strftime("%H:%M:%S"),  #  Solución al error de serialización
         "sexo_permitido": evento.sexo_permitido,
         "genero_permitido": evento.genero_permitido,
-        "rango_edad": f"{evento.edad_min} - {evento.edad_max}" if evento.edad_min and evento.edad_max else "Sin restricción"
+        "rango_edad": f"{evento.edad_min} - {evento.edad_max}" if evento.edad_min and evento.edad_max else "Sin restricción",
+        "organizador": {
+            "id": evento.organizador_user.id,
+            "nombre": evento.organizador_user.nombre
+        }
     }
 
     if evento.dinero:
         response_data["cuota"] = evento.dinero
 
     return jsonify(response_data), 200
+
+
 
 
 
@@ -449,13 +457,13 @@ def guardar_categorias():
     
 
 @api.route('/categories', methods=['GET'])
-# @jwt_required()
+@jwt_required()
 def get_categories():
-    # current_user_id = int(get_jwt_identity())
-    # try:
-    #     current_user_id = int(current_user_id)
-    # except ValueError:
-    #     return jsonify({"error": "ID de usuario inválido"}), 400
+    current_user_id = int(get_jwt_identity())
+    try:
+        current_user_id = int(current_user_id)
+    except ValueError:
+        return jsonify({"error": "ID de usuario inválido"}), 400
 
     categories = Category.query.all()
     if categories == []:
