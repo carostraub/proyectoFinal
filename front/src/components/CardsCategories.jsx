@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 
 function CardsCategories({ categories }) {
   return (
-    <div className="container home">
+    <div className="container home mt-2">
       <div className="row">
         {categories.map((category) => (
-          <div className="col-12 col-md-6 col-lg-3 mb-3" key={category.id}>
+          <div className="col-12 col-md-6 col-lg-6 mb-3" key={category.id}>
             <div className="card text-bg-light d-flex flex-column h-100">
               <div className="card-header text-center">
                 <h3 className="text-decoration-underline">
