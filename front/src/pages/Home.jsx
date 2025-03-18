@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import CardsCategories from "../components/CardsCategories.jsx";
-import { baseURL } from "../config/index.js";
 
 const Home = () => {
   const categories = [
@@ -41,38 +40,12 @@ const Home = () => {
 
   const [listCategories, setLisCategories] = useState(categories);
 
-  const getCategories = async () => {
-    try {
-      const response = await fetch(`${baseURL}/categories`);
-      const data = await response.json();
-      setLisCategories(data);
-    } catch (error) {
-      console.log("Error al cargar categorias: ", error);
-    }
-  };
-
-  useEffect(() => {
-    //getCategories()
-  }, []);
-
   return (
-    <div
-      id="home"
-      className="container d-flex flex-column align-items-center justify-content-center min-vh-100 mt-4"
-    >
-      <div className="row row-cols-1 row-cols-md-2 g-4 justify-content-center">
-        {listCategories.map((item) => (
-          <div className="col" key={item.id}>
-            <CardsCategories
-              id={item.id}
-              categoria={item.categoria}
-              titulo={item.titulo}
-              description1={item.description1}
-              description2={item.description2}
-              url={item.url}
-            />
-          </div>
-        ))}
+    <div id="home" className="container">
+      <div className="row">
+        <div className="col d-flex">
+          <CardsCategories categories={categories} />
+        </div>
       </div>
     </div>
   );

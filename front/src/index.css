@@ -1,43 +1,42 @@
 body {
-    color: #000330 !important;
-    background-color: #fafcff;
+  color: #000330 !important;
+  background-color: #fafcff;
 }
 #navbar {
-    border: 1px solid #3366CC !important;
+  border: 1px solid #3366cc !important;
 }
 .dropdown-menu {
-    right: auto !important; /* Asegura que no se alinee automáticamente a la derecha */
-    left: 0 !important; /* Lo mueve hacia la izquierda */
-    transform: translateX(-50%); /* Centra el dropdown */
-    min-width: 200px; /* Ajusta el ancho mínimo */
-  }
-  #home {
-    display: flex;
-    flex-direction: column;
-    align-items: center !important; /* Centra horizontalmente */
-    justify-content: center; /* Centra verticalmente */
-    min-height: 100vh; /* Asegura que ocupe toda la pantalla */
-    text-align: center; /* Centra el texto */
-  }
+  right: auto !important; /* Asegura que no se alinee automáticamente a la derecha */
+  left: 0 !important; /* Lo mueve hacia la izquierda */
+  transform: translateX(-50%); /* Centra el dropdown */
+  min-width: 200px; /* Ajusta el ancho mínimo */
+}
+.home {
+  display: flex;
+  width: 75rem;
+
+  align-items: center !important; /* Centra horizontalmente */
+  justify-content: center; /* Centra verticalmente */
+  min-height: 100vh; /* Asegura que ocupe toda la pantalla */
+  text-align: center; /* Centra el texto */
+}
 .border {
-    border: 1px solid #3366CC !important;
+  border: 1px solid #3366cc !important;
 }
 .text-decoration-underline {
-    color: #3366CC;
+  color: #3366cc;
 }
 .btn-custom {
-    background-color: #3366CC;
-    color: white;
+  background-color: #3366cc;
+  color: white;
 }
 .btn-custom:hover {
-    color: #FFFF66;
-    background-color: #3366CC;
+  color: #ffff66;
+  background-color: #3366cc;
 }
 h5 {
-    color: #3366CC !important;
+  color: #3366cc !important;
 }
 .card-header {
-    color:#3366CC
-    
+  color: #3366cc;
 }
-  
