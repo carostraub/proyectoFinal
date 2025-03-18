@@ -41,7 +41,7 @@ const Home = () => {
   const [listCategories, setLisCategories] = useState(categories);
 
   return (
-    <div id="home" className="container">
+    <div className="container">
       <div className="row">
         <div className="col d-flex">
           <CardsCategories categories={categories} />

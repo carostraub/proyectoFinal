@@ -11,15 +11,7 @@ body {
   transform: translateX(-50%); /* Centra el dropdown */
   min-width: 200px; /* Ajusta el ancho mínimo */
 }
-.home {
-  display: flex;
-  width: 75rem;
 
-  align-items: center !important; /* Centra horizontalmente */
-  justify-content: center; /* Centra verticalmente */
-  min-height: 100vh; /* Asegura que ocupe toda la pantalla */
-  text-align: center; /* Centra el texto */
-}
 .border {
   border: 1px solid #3366cc !important;
 }
