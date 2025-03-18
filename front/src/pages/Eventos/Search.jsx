@@ -1,112 +1,123 @@
-
-
-// organizador= db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-//     nombre_evento = db.Column(db.String, nullable=False)
-//     ubicacion = db.Column(db.String, nullable=False)
-//     fecha_hora = db.Column(db.String, nullable=False)
-//     dinero = db.Column(db.String)
-
-//     participantes = relationship('User', secondary=participantes_table, back_populates="eventos_postulados")
-
-//  const handleSubmit = async (e) => {
-//         e.preventDefault();
-
-//         //  FormData para enviar la imagen y los demás datos
-//         const dataToSend = new FormData();
-//         for (const key in formData) {
-//             dataToSend.append(key, formData[key]);
-//         }
-
-//         try {
-//             const response = await fetch(`${baseURL}/register`, {
-//                 method: "POST",
-//                 body: dataToSend
-//             });
-
-//             const result = await response.json();
-
-//             if (response.ok) {
-//                 alert("Registro exitoso 🎉");
-//                 console.log("Usuario registrado:", result);
-//             } else {
-//                 alert("Error en el registro: " + result.error);
-//             }
-//         } catch (error) {
-//             console.error("Error en la petición:", error);
-//             alert("Hubo un problema con el registro.");
-//         }
-//     };
-
 import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config";
 import { useAuth } from "../../../src/context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Search = () => {
   const { user } = useAuth();
-  const [eventos, setEventos] = useState([
+  const navigate = useNavigate();
+  const [eventos, setEventos] = useState([]); // Eventos originales
+  const [eventosFiltrados, setEventosFiltrados] = useState([]); // Eventos filtrados
 
-    {
-      organizador: "julio",
-      nombre_evento: "futbol 5",
-      ubicacion: "lagomar",
-      fecha_hora: "18:30 14/03/2025",
-      dinero: "$150",
-      participantes: "10",
-      descripcion: "futbol tranqui entre amigos",
-
-    },
-    {
-      organizador: "julio",
-      nombre_evento: "futbol 5",
-      ubicacion: "lagomar",
-      fecha_hora: "18:30 14/03/2025",
-      dinero: "$150",
-      participantes: "10",
-      descripcion: "futbol tranqui entre amigos",
-
-    }
-
-  ])
+  useEffect(() => {
+    obtenerEventos();
+  }, []);
 
   const obtenerEventos = async () => {
     try {
-      const response = await fetch(`${baseURL}/events`)
-      const data = await response.json()
-      console.log(data)
-      setEventos(data)
-    } catch (error) {
-      console.log(error)
-    }
+      const response = await fetch(`${baseURL}/api/events`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-  }
-  useEffect(() => {
-    // obtenerEventos()
-  }, [])
+      if (!response.ok) throw new Error("Error al obtener eventos");
+
+      const data = await response.json();
+      console.log("Eventos recibidos:", data);
+      setEventos(data); // Guardar eventos originales
+      setEventosFiltrados(filtrarEventos(data)); // Aplicar filtro
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
+
+  const filtrarEventos = (eventosLista) => {
+    if (!user) return []; // Si no hay usuario, no mostramos eventos
+
+    return eventosLista.filter((event) => {
+      // Validación de edad
+      if (event.edad_min && user.edad < event.edad_min) return false;
+      if (event.edad_max && user.edad > event.edad_max) return false;
+
+      // Validación de género )
+      if (event.genero_permitido !== "No importa" && !event.genero_permitido.includes(user.genero)) {
+        return false;
+      }
+
+      // Validación de sexo 
+      if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== user.sexo) {
+        return false;
+      }
+
+      return true;
+    });
+  };
+
+  const handlePostular = async (eventoId) => {
+    try {
+      let token = localStorage.getItem("access_token");
+
+      const response = await fetch(`${baseURL}/api/postular/${eventoId}`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Postulación exitosa!");
+      } else {
+        alert("Error al postular: " + data.error);
+      }
+    } catch (error) {
+      console.error("Error en la solicitud:", error);
+    }
+  };
 
   return (
     <div className="container mt-2">
-      {eventos.map((item, index) => (
-        <div className="card mb-5 border" key={index}>
-          <div className="card-header">{item.nombre_evento}</div>
-          <div className="card-body">
-            <div className="row">
-              <div className="col-9">
-                <h5 className="card-title">Ubicacion: {item.ubicacion}</h5>
-                <p className="card-text">Fecha y Hora: {item.fecha_hora}</p>
-                <p className="card-text">Descripcion: {item.descripcion}</p>
-                <p className="card-text">Requiere pago: {item.dinero}</p>
-              </div>
-              <div className="col-3">
-                <h5 className="card-title">Organizador: {item.organizador}</h5>
-                <a href="#" className="btn btn-custom">
-                  Postular
-                </a>
+      {eventosFiltrados.length > 0 ? (
+        eventosFiltrados.map((event, index) => (
+          <div className="card mb-5 border" key={index}>
+            <div className="card-header">{event.nombre_evento}</div>
+            <div className="card-body">
+              <div className="row">
+                <div className="col-9">
+                  <h5 className="card-title">Ubicación: {event.ubicacion}</h5>
+                  <p className="card-text">Fecha: {event.fecha}</p>
+                  <p className="card-text">Hora: {event.hora}</p>
+                  <p className="card-text">Descripción: {event.description}</p>
+                  <p className="card-text">Requiere pago: {event.dinero}</p>
+                </div>
+                <div className="col-3 text-end">
+                  <h5
+                    className="card-title text-primary"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => navigate(`/perfil/${event.organizador.id}`)}
+                  >
+                    Organizador: {event.organizador.nombre}
+                  </h5>
+                  <button
+                    className="btn btn-custom"
+                    onClick={() => handlePostular(event.id)}
+                  >
+                    Postular
+                  </button>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-      ))}
+        ))
+      ) : (
+        <p className="text-center text-muted">No hay eventos disponibles.</p>
+      )}
     </div>
   );
 };
+
 export default Search;
