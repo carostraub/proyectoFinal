@@ -15,18 +15,24 @@ const Search = () => {
 
   const obtenerEventos = async () => {
     try {
+      let token = localStorage.getItem("access_token"); // Obtiene el token del almacenamiento local
+      if (!token) {
+        throw new Error("No hay token de autenticación disponible.");
+      }
+  
       const response = await fetch(`${baseURL}/api/events`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`, // Incluye el token en el header
         },
       });
-
+  
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Error en la respuesta del servidor: ${errorText}`);
       }
-
+  
       const data = await response.json();
       console.log("Eventos recibidos:", data);
       setEventos(data); // Guardar eventos originales
@@ -35,6 +41,7 @@ const Search = () => {
       console.error("Error en la solicitud:", error);
     }
   };
+  
 
   const filtrarEventos = (eventosLista) => {
     if (!user) return []; // Si no hay usuario, no mostramos eventos
