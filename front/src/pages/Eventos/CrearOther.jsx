@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
 import AgeRange from "../../components/AgeRange";
+import { baseURL } from "../../config";
 
 const CreateOther = () => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    category: 4, // le agregue la categoria
+    category: 4, // ID de la categoría "Otros Eventos"
     nameEvent: "",
     location: "",
     time: "",
@@ -30,47 +31,8 @@ const CreateOther = () => {
     });
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!isFormComplete()) {
-      alert("Por favor, completa todos los campos antes de continuar.");
-      return;
-    } else {
-      console.log("Formulario enviado con éxito:", formData);
-      try {
-        let token = localStorage.getItem("access_token");
-        const response = await fetch("http://localhost:5000/api/evento", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(formData)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          alert("Evento creado con éxito!");
-        } else {
-          alert("Error al crear el evento: " + data.error);
-        }
-      } catch (error) {
-        console.log("Error en la solicitud:", error);
-      }
-    }
-  };
-
-  const handleAgeRangeChange = ({ edadMin, edadMax }) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ageRange: { edadMin, edadMax } 
-    }));
-  };
-
   const handleCheckboxChange = (e) => {
     const { value, checked } = e.target;
-
     setFormData((prevFormData) => {
       if (checked) {
         return { ...prevFormData, gender: [...prevFormData.gender, value] };
@@ -80,24 +42,49 @@ const CreateOther = () => {
     });
   };
 
+  const handleAgeRangeChange = ({ edadMin, edadMax }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ageRange: { edadMin, edadMax }
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!isFormComplete()) {
+      alert("Por favor, completa todos los campos antes de continuar.");
+      return;
+    } else {
+      console.log("Formulario enviado con éxito:", formData);
+      try {
+        let token = localStorage.getItem("access_token");
+        const response = await fetch(`${baseURL}/api/evento`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`
+          },
+          body: JSON.stringify(formData)
+        });
+
+        if (response.ok) {
+          alert("Evento creado con éxito! 🎉");
+        } else {
+          alert("Error al crear evento");
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
   const isFormComplete = () => {
     const { nameEvent, location, time, date, missingPeople, description, sex, gender, ageRange } = formData;
 
-    if (!nameEvent || !location || !time || !date || !description || !sex) {
-      return false;
-    }
-
-    if (missingPeople <= 0) {
-      return false;
-    }
-
-    if (!gender.length) {
-      return false;
-    }
-
-    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
-      return false;
-    }
+    if (!nameEvent || !location || !time || !date || !description || !sex) return false;
+    if (missingPeople <= 0) return false;
+    if (!gender.length) return false;
+    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) return false;
 
     return true;
   };
@@ -108,9 +95,7 @@ const CreateOther = () => {
       <div className="row">
         <div className="col">
           <div className="mb-3">
-            <label htmlFor="nameEvent" className="form-label">
-              Nombre de Evento
-            </label>
+            <label htmlFor="nameEvent" className="form-label">Nombre de Evento</label>
             <input
               type="text"
               className="form-control"
@@ -118,9 +103,8 @@ const CreateOther = () => {
               value={formData.nameEvent}
               onChange={handleChange}
             />
-            <label htmlFor="location" className="form-label">
-              Ubicación
-            </label>
+
+            <label htmlFor="location" className="form-label">Ubicación</label>
             <input
               type="text"
               className="form-control"
@@ -128,11 +112,10 @@ const CreateOther = () => {
               value={formData.location}
               onChange={handleChange}
             />
+
             <div className="row">
               <div className="col">
-                <label htmlFor="date" className="form-label">
-                  Fecha
-                </label>
+                <label className="form-label">Fecha</label>
                 <input
                   type="date"
                   className="form-control"
@@ -142,9 +125,7 @@ const CreateOther = () => {
                 />
               </div>
               <div className="col">
-                <label htmlFor="time" className="form-label">
-                  Horario
-                </label>
+                <label className="form-label">Horario</label>
                 <input
                   type="time"
                   className="form-control"
@@ -154,29 +135,31 @@ const CreateOther = () => {
                 />
               </div>
             </div>
-            <div className="row">
+
+            {/* Pago y personas faltantes alineados */}
+            <div className="row mt-3">
               <div className="col">
-                <label htmlFor="missingPeople" className="form-label">
-                  ¿Cuántas personas faltan?
-                </label>
+                <label className="form-label">¿Cuántas personas faltan?</label>
                 <input
                   type="number"
                   className="form-control"
                   name="missingPeople"
                   value={formData.missingPeople}
                   onChange={handleChange}
+                  style={{ width: "5rem", display: "inline-block" }}
                 />
               </div>
+
               <div className="col">
-                <div>¿Se requiere de pago?</div>
+                <label className="form-label">¿Se requiere de pago?</label>
                 <div className="form-check form-check-inline">
                   <input
                     className="form-check-input"
                     type="radio"
+                    name="payment"
                     value="si"
                     checked={formData.payment === "si"}
                     onChange={handleChange}
-                    name="payment"
                   />
                   <label className="form-check-label">Sí</label>
                 </div>
@@ -184,41 +167,73 @@ const CreateOther = () => {
                   <input
                     className="form-check-input"
                     type="radio"
+                    name="payment"
                     value="no"
                     checked={formData.payment === "no"}
                     onChange={handleChange}
-                    name="payment"
                   />
                   <label className="form-check-label">No</label>
                 </div>
               </div>
             </div>
+
           </div>
         </div>
+
         <div className="col">
-          <h3 className="text-center mt-4">Rango de edad</h3>
+          <h3 className="text-center mt-4">Filtros</h3>
+
+          {/* Sexo */}
+          <h5 className="mt-3">Sexo</h5>
+          <div className="d-flex justify-content-center">
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="sex" value="Masculino" onChange={handleChange} />
+              <label className="form-check-label">Masculino</label>
+            </div>
+            <div className="form-check form-check-inline">
+              <input className="form-check-input" type="radio" name="sex" value="Femenino" onChange={handleChange} />
+              <label className="form-check-label">Femenino</label>
+            </div>
+          </div>
+
+          {/* Género */}
+          <h5 className="mt-3">Género</h5>
+          <div className="d-flex justify-content-center">
+            {["Hombre", "Mujer", "No Binario", "Otro"].map((gen) => (
+              <div key={gen} className="form-check form-check-inline">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  value={gen}
+                  checked={formData.gender.includes(gen)}
+                  onChange={handleCheckboxChange}
+                />
+                <label className="form-check-label">{gen}</label>
+              </div>
+            ))}
+          </div>
+
+          {/* Rango de edad */}
+          <h5 className="mt-3">Rango de edad</h5>
           <AgeRange onChange={handleAgeRangeChange} />
         </div>
       </div>
       <div className="row">
         <div className="col">
           <div className="form-floating">
-            <textarea
-              className="form-control"
-              style={{ height: "100px" }}
+            <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px" }}
               name="description"
               value={formData.description}
               onChange={handleChange}
-            />
-            <label>Descripción del evento...</label>
+            >
+
+            </textarea>
+            <label htmlFor="floatingTextarea2">Descripcion del evento...</label>
           </div>
         </div>
       </div>
-      <div className="mt-5">
-        <button className="btn btn-custom w-50" onClick={handleSubmit}>
-          Crear Evento
-        </button>
-      </div>
+
+      <button className="btn btn-custom w-50 mt-4" onClick={handleSubmit}>Crear Evento</button>
     </div>
   );
 };

@@ -6,7 +6,7 @@ const CreateEvent = () => {
   const { user } = useAuth();
 
   const [formData, setFormData] = useState({
-    category: 2, // Agregue la categoria porque el backend lo estará esperando
+    category: 2, // Agregue la categoría porque el backend lo estará esperando
     eventType: "",
     nameEvent: "",
     location: "",
@@ -29,6 +29,24 @@ const CreateEvent = () => {
       ...formData,
       [name]: value
     });
+  };
+
+  const handleCheckboxChange = (e) => {
+    const { value, checked } = e.target;
+    setFormData((prevFormData) => {
+      if (checked) {
+        return { ...prevFormData, gender: [...prevFormData.gender, value] };
+      } else {
+        return { ...prevFormData, gender: prevFormData.gender.filter((g) => g !== value) };
+      }
+    });
+  };
+
+  const handleAgeRangeChange = ({ edadMin, edadMax }) => {
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      ageRange: { edadMin, edadMax } 
+    }));
   };
 
   const handleSubmit = async (e) => {
@@ -62,43 +80,13 @@ const CreateEvent = () => {
     }
   };
 
-  const handleAgeRangeChange = ({ edadMin, edadMax }) => {
-    setFormData((prevFormData) => ({
-      ...prevFormData,
-      ageRange: { edadMin, edadMax } 
-    }));
-  };
-
-  const handleCheckboxChange = (e) => {
-    const { value, checked } = e.target;
-
-    setFormData((prevFormData) => {
-      if (checked) {
-        return { ...prevFormData, gender: [...prevFormData.gender, value] };
-      } else {
-        return { ...prevFormData, gender: prevFormData.gender.filter((g) => g !== value) };
-      }
-    });
-  };
-
   const isFormComplete = () => {
     const { nameEvent, location, time, date, missingPeople, description, sex, gender, ageRange } = formData;
 
-    if (!nameEvent || !location || !time || !date || !description || !sex) {
-      return false;
-    }
-
-    if (missingPeople <= 0) {
-      return false;
-    }
-
-    if (!gender.length) {
-      return false;
-    }
-
-    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
-      return false;
-    }
+    if (!nameEvent || !location || !time || !date || !description || !sex) return false;
+    if (missingPeople <= 0) return false;
+    if (!gender.length) return false;
+    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) return false;
 
     return true;
   };
@@ -109,127 +97,97 @@ const CreateEvent = () => {
       <div className="row">
         <div className="col">
           <div className="mb-3">
-            <label htmlFor="eventType" className="form-label">
-              Tipo de Evento
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="eventType"
-              value={formData.eventType}
-              onChange={handleChange}
-            />
-            <label htmlFor="nameEvent" className="form-label">
-              Nombre de Evento
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="nameEvent"
-              value={formData.nameEvent}
-              onChange={handleChange}
-            />
-            <label htmlFor="location" className="form-label">
-              Ubicación
-            </label>
-            <input
-              type="text"
-              className="form-control"
-              name="location"
-              value={formData.location}
-              onChange={handleChange}
-            />
+            <label className="form-label">Tipo de Evento</label>
+            <input type="text" className="form-control" name="eventType" value={formData.eventType} onChange={handleChange} />
+            
+            <label className="form-label">Nombre de Evento</label>
+            <input type="text" className="form-control" name="nameEvent" value={formData.nameEvent} onChange={handleChange} />
+            
+            <label className="form-label">Ubicación</label>
+            <input type="text" className="form-control" name="location" value={formData.location} onChange={handleChange} />
+            
             <div className="row">
               <div className="col">
-                <label htmlFor="date" className="form-label">
-                  Fecha
-                </label>
-                <input
-                  type="date"
-                  className="form-control"
-                  name="date"
-                  value={formData.date}
-                  onChange={handleChange}
-                />
+                <label className="form-label">Fecha</label>
+                <input type="date" className="form-control" name="date" value={formData.date} onChange={handleChange} />
               </div>
               <div className="col">
-                <label htmlFor="time" className="form-label">
-                  Horario
-                </label>
-                <input
-                  type="time"
-                  className="form-control"
-                  name="time"
-                  value={formData.time}
-                  onChange={handleChange}
-                />
+                <label className="form-label">Horario</label>
+                <input type="time" className="form-control" name="time" value={formData.time} onChange={handleChange} />
               </div>
             </div>
-            <div className="row">
+
+            {/* Personas faltantes y Pago en la misma línea */}
+            <div className="row mt-3">
               <div className="col">
-                <label htmlFor="missingPeople" className="form-label">
-                  ¿Cuántas personas faltan?
-                </label>
-                <input
-                  type="number"
-                  className="form-control"
-                  name="missingPeople"
-                  value={formData.missingPeople}
-                  onChange={handleChange}
-                />
+                <label className="form-label">¿Cuántas personas faltan?</label>
+                <div className="d-flex justify-content-center">
+
+                <input type="number" 
+                className="form-control" 
+                name="missingPeople" 
+                value={formData.missingPeople} 
+                onChange={handleChange} 
+                style={{ width: "5rem" }} />
+                </div>
               </div>
+
               <div className="col">
-                <div>¿Se requiere de pago?</div>
+                <div className="form-label">¿Se requiere de pago?</div>
                 <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    value="si"
-                    checked={formData.payment === "si"}
-                    onChange={handleChange}
-                    name="payment"
-                  />
+                  <input className="form-check-input" 
+                  type="radio" 
+                  name="payment" 
+                  value="si" 
+                  checked={formData.payment === "si"} 
+                  onChange={handleChange} />
                   <label className="form-check-label">Sí</label>
                 </div>
                 <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    value="no"
-                    checked={formData.payment === "no"}
-                    onChange={handleChange}
-                    name="payment"
-                  />
+                  <input className="form-check-input" type="radio" name="payment" value="no" checked={formData.payment === "no"} onChange={handleChange} />
                   <label className="form-check-label">No</label>
                 </div>
               </div>
             </div>
           </div>
         </div>
+
+        {/* Filtros */}
         <div className="col">
-          <h3 className="text-center mt-4">Rango de edad</h3>
+        <h1 className="text-center">Filtros</h1>
+          <h5 className="mt-4 text-center">Sexo</h5>
+          <div className="d-flex justify-content-center">
+            {["Masculino", "Femenino", "Mixto"].map((sex) => (
+              <div key={sex} className="form-check form-check-inline">
+                <input className="form-check-input" type="radio" name="sex" value={sex} onChange={handleChange} />
+                <label className="form-check-label">{sex}</label>
+              </div>
+            ))}
+          </div>
+
+          <h5 className="mt-3 text-center">Género</h5>
+          <div className="d-flex justify-content-center">
+            {["Hombre", "Mujer", "No Binario", "Otro"].map((gen) => (
+              <div key={gen} className="form-check form-check-inline">
+                <input className="form-check-input" type="checkbox" value={gen} checked={formData.gender.includes(gen)} onChange={handleCheckboxChange} />
+                <label className="form-check-label">{gen}</label>
+              </div>
+            ))}
+          </div>
+
+          <h5 className="mt-3 text-center">Rango de edad</h5>
           <AgeRange onChange={handleAgeRangeChange} />
         </div>
       </div>
-      <div className="row">
+
+      <div className="row mt-3">
         <div className="col">
-          <div className="form-floating">
-            <textarea
-              className="form-control"
-              style={{ height: "100px" }}
-              name="description"
-              value={formData.description}
-              onChange={handleChange}
-            />
-            <label>Descripción del evento...</label>
-          </div>
+          <label className="form-label">Descripción del evento</label>
+          <textarea className="form-control" name="description" value={formData.description} onChange={handleChange} style={{ height: "100px" }} />
         </div>
       </div>
-      <div className="mt-5">
-        <button className="btn btn-custom w-50" onClick={handleSubmit}>
-          Crear Evento
-        </button>
-      </div>
+
+      <button className="btn btn-custom w-50 mt-4" onClick={handleSubmit}>Crear Evento</button>
     </div>
   );
 };

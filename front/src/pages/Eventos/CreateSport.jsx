@@ -246,7 +246,7 @@ const CreateSport = () => {
                     type="radio"
                     id="PagoCheckbox1"
                     value="si"
-                    checked={FormData.payment === "si"}
+                    checked={formData.payment === "si"}
                     onChange={handleChange}
                     name="payment"
 
@@ -261,7 +261,7 @@ const CreateSport = () => {
                     type="radio"
                     id="PagoCheckbox2"
                     value="no"
-                    checked={FormData.payment === "no"}
+                    checked={formData.payment === "no"}
                     onChange={handleChange}
                     name="payment"
                   />
@@ -278,7 +278,7 @@ const CreateSport = () => {
           <h1 className="text-center">Filtros</h1>
           <h3 className="text-center mt-4">Genero</h3>
 
-          <div className="form-check form-check-inline">
+          <div className="form-check  form-check-inline">
             <input
               className="form-check-input"
               type="checkbox"
