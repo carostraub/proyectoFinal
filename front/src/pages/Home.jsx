@@ -12,7 +12,7 @@ const Home = () => {
       url: "/createsport",
     },
     {
-      id: 2,
+      id: 3,
       categoria: "Seguridad",
       titulo: "¡Busca tu compañero aquí!",
       description1: "¿Te espera un camino peligroso o no deseado?",
@@ -20,7 +20,7 @@ const Home = () => {
       url: "/createsecurity",
     },
     {
-      id: 3,
+      id: 2,
       categoria: "Eventos",
       titulo: "¡Crea tu evento aquí!",
       description1: "¿Buscas un acompañante para un concierto o evento?",

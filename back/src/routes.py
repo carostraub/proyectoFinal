@@ -499,3 +499,23 @@ def get_categories():
     return jsonify(resultado), 200
 
 
+@api.route('/evento/categoria/<int:categoria_id>', methods=['GET'])
+@jwt_required()
+def evento_categoria(categoria_id):
+    current_user_id = int(get_jwt_identity())
+    user = User.query.get(current_user_id)
+    evento = Evento.query.filter_by(category=categoria_id).all()
+    
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    if not evento:
+        return jsonify({"error": "Evento no encontrado"}), 404
+
+    # if evento.organizador_id != current_user_id:
+    #     return jsonify({"error": "Este no es tu evento"}), 400
+
+    resultado =list(map(lambda item:item.serialize(),evento))
+
+    return jsonify(resultado), 200
+

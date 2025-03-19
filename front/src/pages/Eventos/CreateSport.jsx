@@ -2,10 +2,11 @@ import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
 import AgeRange from "../../components/AgeRange";
 import { baseURL } from "../../config/index";
+// import { useNavigate } from "react-router-dom";
 
 const CreateSport = () => {
   const { user } = useAuth();
-
+// const navigate = useNavigate();
   const sports = [
     "Ajedrez",
     "Atletismo",
@@ -82,7 +83,6 @@ const CreateSport = () => {
         console.log(response)
         if (response.ok) {
           alert("Evento creado de forma exitosa! 🎉");
-
         } else {
           alert("Error al crear evento: " + response.error);
         }

@@ -2,9 +2,11 @@ import React, { useEffect, useState } from "react";
 import { baseURL } from "../../config";
 import { useAuth } from "../../../src/context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 const Search = () => {
   const { user } = useAuth();
+  const { id } = useParams();
   const navigate = useNavigate();
   const [eventos, setEventos] = useState([]); // Eventos originales
   const [eventosFiltrados, setEventosFiltrados] = useState([]); // Eventos filtrados
@@ -20,7 +22,7 @@ const Search = () => {
         throw new Error("No hay token de autenticación disponible.");
       }
   
-      const response = await fetch(`${baseURL}/api/events`, {
+      const response = await fetch(`${baseURL}/api/evento/categoria/${id}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
