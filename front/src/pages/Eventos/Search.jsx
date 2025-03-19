@@ -69,14 +69,15 @@ const Search = () => {
     try {
       let token = localStorage.getItem("access_token");
 
-      const response = await fetch(`${baseURL}/api/postular/${eventoId}`, {
-        method: "POST",
+      const response = await fetch(`${baseURL}/api/gestionar_postulacion/${eventoId}`, {
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${token}`,
         },
       });
-
+  console.log(response)
+  console.log(eventoId)
       const data = await response.json();
 
       if (response.ok) {

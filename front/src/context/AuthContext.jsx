@@ -76,7 +76,7 @@ export const AuthProvider = ({ children }) => {
 
       if (response.ok) {
         localStorage.setItem("access_token", data.access_token); //  Guardar el token
-        console.log("Token guardado:", localStorage.getItem("access_token"));
+        // console.log("Token guardado:", localStorage.getItem("access_token"));
         setUser(data.user);
         navigate("/"); //Redirige al Home
       } else {

@@ -168,11 +168,11 @@ def crear_evento():
 def mis_eventos():
     current_user_id = get_jwt_identity()
     user = User.query.get(current_user_id)
-
+    
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
-
-    eventos = Evento.query.filter_by(organizador_id=current_user_id).all()
+ 
+    eventos = Evento.query.filter(Evento.participantes.contains(user)).all()
     eventos_serializados = [evento.serialize() for evento in eventos]
 
     return jsonify(eventos_serializados), 200
