@@ -51,31 +51,38 @@ const CreateSecurity = () => {
     if (!isFormComplete()) {
       alert("Por favor, completa todos los campos antes de continuar.");
       return;
-    } else {
-      console.log("Formulario enviado con éxito:", formData);
-      try {
-        let token = localStorage.getItem("access_token");
-        const response = await fetch("http://localhost:5000/api/evento", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`
-          },
-          body: JSON.stringify(formData)
-        });
-
-        const data = await response.json();
-
-        if (response.ok) {
-          alert("Evento creado con éxito!");
-        } else {
-          alert("Error al crear el evento: " + data.error);
-        }
-      } catch (error) {
-        console.log("Error en la solicitud:", error);
+    }
+  
+    let token = localStorage.getItem("access_token");
+    console.log("Token obtenido:", token); // 🔍 Verifica si el token existe
+  
+    if (!token) {
+      alert("No tienes un token válido. Intenta iniciar sesión nuevamente.");
+      return;
+    }
+  
+    try {
+      const response = await fetch("http://localhost:5000/api/evento", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`
+        },
+        body: JSON.stringify(formData)
+      });
+  
+      const data = await response.json();
+  
+      if (response.ok) {
+        alert("Evento creado con éxito!");
+      } else {
+        alert("Error al crear el evento: " + data.error);
       }
+    } catch (error) {
+      console.log("Error en la solicitud:", error);
     }
   };
+  
 
   const isFormComplete = () => {
     const { nameEvent, locationFrom, locationTo, time, date, missingPeople, description, sex, gender, ageRange } = formData;

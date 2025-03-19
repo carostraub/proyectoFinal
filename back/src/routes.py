@@ -178,6 +178,24 @@ def mis_eventos():
     return jsonify(eventos_serializados), 200
 
 
+@api.route('/events', methods=['GET'])
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
+@jwt_required()
+def obtener_eventos():
+    
+    current_user_id = int(get_jwt_identity())  # Obtener el ID del usuario autenticado
+    user = User.query.get(current_user_id)
+
+    if not user:
+        return jsonify({"error": "Usuario no encontrado"}), 404
+
+    eventos = Evento.query.all()  # Obtener todos los eventos de la base de datos
+    eventos_serializados = [evento.serialize() for evento in eventos]
+
+    return jsonify(eventos_serializados), 200
+
+
+
 
 
 @api.route('/evento/<int:evento_id>', methods=['GET'])

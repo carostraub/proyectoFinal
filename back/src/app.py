@@ -23,7 +23,7 @@ app.config['DEBUG'] = True
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv('DATABASE_URL') 
 app.config['JWT_SECRET_KEY'] = os.getenv('JWT_SECRET') 
-# app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=2)
+app.config['JWT_ACCESS_TOKEN_EXPIRES'] = timedelta(days=2)
 
 db.init_app(app)
 Migrate(app, db)

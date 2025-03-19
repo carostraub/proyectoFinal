@@ -22,7 +22,10 @@ const Search = () => {
         },
       });
 
-      if (!response.ok) throw new Error("Error al obtener eventos");
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Error en la respuesta del servidor: ${errorText}`);
+      }
 
       const data = await response.json();
       console.log("Eventos recibidos:", data);
