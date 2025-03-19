@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
 import AgeRange from "../../components/AgeRange";
 
+
 const CreateEvent = () => {
   const { user } = useAuth();
+  
 
   const [formData, setFormData] = useState({
     category: 2, // Agregue la categoría porque el backend lo estará esperando
@@ -56,6 +58,7 @@ const CreateEvent = () => {
       return;
     } else {
       console.log("Formulario enviado con éxito:", formData);
+    
       try {
         let token = localStorage.getItem("access_token");
         const response = await fetch("http://localhost:5000/api/evento", {
