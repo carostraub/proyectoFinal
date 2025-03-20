@@ -50,6 +50,7 @@ const Search = () => {
 
     return eventosLista.filter((event) => {
         console.log("Verificando evento:", event.nombre_evento);
+        console.log("Datos del evento:", event);
 
         // Validación de edad
         if (event.edad_min && user.edad < event.edad_min) {
@@ -62,15 +63,22 @@ const Search = () => {
         }
 
         // Validación de género
-        if (event.genero_permitido !== "No importa") {
-          const generosEvento = event.genero_permitido.split(",").map(g => g.trim());
-          if (!generosEvento.includes(user.genero)) {
-              console.log(`Evento descartado por género: ${event.nombre_evento}`);
-              return false;
-          }
-      }
+        console.log("Validación de género");
+        console.log("Género permitido en el evento:", event.genero_permitido, "Tipo:", typeof event.genero_permitido);
+        console.log("Género del usuario:", user.genero);
+
+        const generosPermitidos = event.genero_permitido.split(",");
+        console.log("Array de géneros permitidos:", generosPermitidos);
+
+        if (generosPermitidos.length > 0 && !generosPermitidos.includes("No importa") && !generosPermitidos.includes(user.genero)) {
+            console.log(`Evento descartado por género: ${event.nombre_evento}`);
+            return false;
+        }
 
         // Validación de sexo
+        console.log("Validación de sexo");
+        console.log("Sexo permitido en el evento:", event.sexo_permitido);
+        console.log("Sexo del usuario:", user.sexo);
         if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== user.sexo) {
             console.log(`Evento descartado por sexo: ${event.nombre_evento}`);
             return false;
@@ -80,6 +88,8 @@ const Search = () => {
         return true;
     });
 };
+
+
 
 
   const handlePostular = async (eventoId) => {

@@ -54,7 +54,7 @@ def initialize_categories():
             db.session.add(nueva_categoria)
 
     db.session.commit()
-    print("✅ Categorías inicializadas correctamente.")
+    print(" Categorías inicializadas correctamente.")
 
 
 if __name__ == '__main__':

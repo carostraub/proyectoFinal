@@ -29,6 +29,7 @@ const CreateSport = () => {
     "Taekwondo",
     "Tenis",
     "Tenis de mesa",
+    "Trekking",
     "Tiro con arco",
     "Voleibol"
   ];

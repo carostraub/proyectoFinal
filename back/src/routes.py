@@ -1,6 +1,6 @@
 import os
 import cloudinary.uploader
-from flask_cors import cross_origin
+from flask_cors import cross_origin, CORS
 from werkzeug.utils import secure_filename
 from werkzeug.security import generate_password_hash
 from flask import Blueprint, request, jsonify
@@ -8,8 +8,9 @@ from flask_jwt_extended import jwt_required, create_access_token, get_jwt_identi
 from models import User, Evento, participantes_table, db, Estatus, Category
 from datetime import datetime
 
-
 api = Blueprint("api", __name__)
+
+
 
 
 @api.route('/register', methods=['POST'])
@@ -107,7 +108,7 @@ def login():
 def crear_evento():
     current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
-    
+
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
 
@@ -119,10 +120,20 @@ def crear_evento():
             return jsonify({"error": f"Falta el campo requerido: {field}"}), 400
 
     # Validaciones de edad, sexo y género
-    edad_min = data.get("ageRange.edadMin")
-    edad_max = data.get("ageRange.edadMax")
+    edad_min = data.get("ageRange", {}).get("edadMin")
+    edad_max = data.get("ageRange", {}).get("edadMax")
     sexo_permitido = data.get("sex", "No importa")
     genero_permitido = data.get("gender", "No importa")
+
+    # Procesamiento del género permitido
+    if isinstance(genero_permitido, list):
+        genero_permitido_str = ",".join(genero_permitido)
+    elif isinstance(genero_permitido, str):
+        genero_permitido_str = genero_permitido.replace("{", "").replace("}", "").replace("\"", "")
+    else:
+        genero_permitido_str = str(genero_permitido)
+
+    print("Género permitido procesado:", genero_permitido_str)
 
     if edad_min and edad_max and edad_min > edad_max:
         return jsonify({"error": "La edad mínima no puede ser mayor que la edad máxima"}), 400
@@ -152,7 +163,7 @@ def crear_evento():
         edad_min=edad_min,
         edad_max=edad_max,
         sexo_permitido=sexo_permitido,
-        genero_permitido=genero_permitido
+        genero_permitido=genero_permitido_str  # Almacenar como string limpio
     )
 
     try:
@@ -161,6 +172,12 @@ def crear_evento():
         return jsonify(nuevo_evento.serialize()), 200
     except Exception as e:
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
+
+
+
+
+
+
     
 
 @api.route('/myevents', methods=['GET'])
