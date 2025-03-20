@@ -171,8 +171,9 @@ def mis_eventos():
     
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
- 
-    eventos = Evento.query.filter(Evento.participantes.contains(user)).all()
+
+    # Obtener los eventos donde el usuario es el organizador
+    eventos = Evento.query.filter_by(organizador_id=current_user_id).all()
     eventos_serializados = [evento.serialize() for evento in eventos]
 
     return jsonify(eventos_serializados), 200
@@ -504,18 +505,17 @@ def get_categories():
 def evento_categoria(categoria_id):
     current_user_id = int(get_jwt_identity())
     user = User.query.get(current_user_id)
-    evento = Evento.query.filter_by(category=categoria_id).all()
     
     if not user:
         return jsonify({"error": "Usuario no encontrado"}), 404
 
-    if not evento:
+    # Verificar si hay eventos con la categoría dada
+    eventos = Evento.query.filter(Evento.category == categoria_id).all()
+
+    if not eventos:
         return jsonify({"error": "Evento no encontrado"}), 404
 
-    # if evento.organizador_id != current_user_id:
-    #     return jsonify({"error": "Este no es tu evento"}), 400
-
-    resultado =list(map(lambda item:item.serialize(),evento))
+    resultado = [evento.serialize() for evento in eventos]
 
     return jsonify(resultado), 200
 

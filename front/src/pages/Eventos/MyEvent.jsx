@@ -18,11 +18,12 @@ const MyEvents = () => {
             Authorization: `Bearer ${token}`,
           },
         });
-console.log(response)
+
         const data = await response.json();
-        console.log(data)
-        if (response.ok) {
-          setEvents(data);
+        console.log("Eventos recibidos:", data); // Verificar qué se recibe del backend
+        if (response.ok && Array.isArray(data)) {
+          setEvents(data);  // Asegúrate de que data sea un array antes de guardarlo
+          console.log("Eventos guardados en el estado:", data); // Verificar el estado de eventos
         } else {
           console.error("Error al obtener eventos:", data.error);
         }
@@ -103,99 +104,68 @@ console.log(response)
         <div className="col-md-4">
           <h4>Lista de Eventos</h4>
           <ul className="list-group">
-            {events.map((event) => (
-              <li
-                key={event.id}
-                className={`list-group-item ${selectedEvent?.id === event.id ? "selected" : ""
-                  }`}
-                onClick={() => handleSelectEvent(event)}
-                style={{ cursor: "pointer" }}
-              >
-                {event.nombre_evento}
-              </li>
-            ))}
+            {events.length > 0 ? (
+              events.map((event) => (
+                <li
+                  key={event.id}
+                  className={`list-group-item ${selectedEvent?.id === event.id ? "selected" : ""}`}
+                  onClick={() => handleSelectEvent(event)}
+                  style={{ cursor: "pointer" }}
+                >
+                  {event.nombre_evento}
+                </li>
+              ))
+            ) : (
+              <li className="list-group-item">No hay eventos disponibles.</li>
+            )}
           </ul>
         </div>
         <div className="col-md-8">
           {selectedEvent && (
             <div className="card border p-4">
-              {/* Botón de cierre (X) en la esquina superior derecha */}
               <button
                 className="btn-close position-absolute top-0 end-0 m-2"
                 onClick={() => setSelectedEvent(null)}
               />
               <h3>{selectedEvent.nombre_evento}</h3>
-              <h5 className="text-muted">{selectedEvent.category}</h5>
+              <p>{selectedEvent.description}</p>
+              <p>Fecha: {selectedEvent.fecha}</p>
+              <p>Hora: {selectedEvent.hora}</p>
+              <p>Ubicación: {selectedEvent.ubicacion}</p>
+              <p>Pago: {selectedEvent.dinero}</p>
+              <p>Categoría: {selectedEvent.category}</p>
+              <p>Rango de Edad: {selectedEvent.edad_min} - {selectedEvent.edad_max}</p>
+              <p>Sexo Permitido: {selectedEvent.sexo_permitido}</p>
+              <p>Género Permitido: {selectedEvent.genero_permitido}</p>
 
-              <div className="row">
-                {/* Filtros */}
-                <div className="col-md-6">
-                  <h6>Filtros seleccionados:</h6>
-                  <p>
-                    <strong>Género:</strong> {selectedEvent.genero_permitido}
-                  </p>
-                  <p>
-                    <strong>Sexo:</strong> {selectedEvent.sexo_permitido}
-                  </p>
-                  <p>
-                    <strong>Rango de edad:</strong> {selectedEvent.edad_min} -{" "}
-                    {selectedEvent.edad_max}
-                  </p>
-                </div>
-
-                {/* Ubicación, Fecha y Hora */}
-                <div className="col-md-6 text-end">
-                  <h6>Ubicación:</h6>
-                  <p>{selectedEvent.ubicacion}</p>
-                  <h6>Fecha:</h6>
-                  <p>{selectedEvent.fecha}</p>
-                  <h6>Hora:</h6>
-                  <p>{selectedEvent.hora}</p>
-                </div>
-              </div>
-
-              {/* Lista de Postulantes */}
               <h4 className="mt-4">Postulantes</h4>
-              <div className="row">
-                {selectedEvent.participantes.length > 0 ? (
-                  selectedEvent.participantes.map((postulant) => (
-                    <div key={postulant.id} className="col-md-4">
-                      <div className="card text-center p-3 mb-3">
-                        <h5>{postulant.nombre}</h5>
-                        <p>Edad: {postulant.edad}</p>
-                        <button
-                          className="btn btn-success btn-sm me-2"
-                          onClick={() =>
-                            handlePostulantAction(
-                              selectedEvent.id,
-                              postulant.id,
-                              "PARTICIPANTE"
-                            )
-                          }
-                        >
-                          Aceptar
-                        </button>
-                        <button
-                          className="btn btn-danger btn-sm"
-                          onClick={() =>
-                            handlePostulantAction(
-                              selectedEvent.id,
-                              postulant.id,
-                              "RECHAZADO"
-                            )
-                          }
-                        >
-                          Rechazar
-                        </button>
-                      </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-muted">No hay postulantes aún.</p>
-                )}
-              </div>
+              {selectedEvent.participantes && selectedEvent.participantes.length > 0 ? (
+                selectedEvent.participantes.map((postulant) => (
+                  <div key={postulant.id} className="card text-center p-3 mb-3">
+                    <h5>{postulant.nombre}</h5>
+                    <p>Edad: {postulant.edad}</p>
+                    <button
+                      className="btn btn-success btn-sm me-2"
+                      onClick={() =>
+                        handlePostulantAction(selectedEvent.id, postulant.id, "PARTICIPANTE")
+                      }
+                    >
+                      Aceptar
+                    </button>
+                    <button
+                      className="btn btn-danger btn-sm"
+                      onClick={() =>
+                        handlePostulantAction(selectedEvent.id, postulant.id, "RECHAZADO")
+                      }
+                    >
+                      Rechazar
+                    </button>
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted">No hay postulantes aún.</p>
+              )}
 
-              {/* Botón para eliminar evento */}
               <div className="text-center mt-4">
                 <button
                   className="btn btn-danger"

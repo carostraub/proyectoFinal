@@ -49,23 +49,38 @@ const Search = () => {
     if (!user) return []; // Si no hay usuario, no mostramos eventos
 
     return eventosLista.filter((event) => {
-      // Validación de edad
-      if (event.edad_min && user.edad < event.edad_min) return false;
-      if (event.edad_max && user.edad > event.edad_max) return false;
+        console.log("Verificando evento:", event.nombre_evento);
 
-      // Validación de género )
-      if (event.genero_permitido !== "No importa" && !event.genero_permitido.includes(user.genero)) {
-        return false;
+        // Validación de edad
+        if (event.edad_min && user.edad < event.edad_min) {
+            console.log(`Evento descartado por edad mínima: ${event.nombre_evento}`);
+            return false;
+        }
+        if (event.edad_max && user.edad > event.edad_max) {
+            console.log(`Evento descartado por edad máxima: ${event.nombre_evento}`);
+            return false;
+        }
+
+        // Validación de género
+        if (event.genero_permitido !== "No importa") {
+          const generosEvento = event.genero_permitido.split(",").map(g => g.trim());
+          if (!generosEvento.includes(user.genero)) {
+              console.log(`Evento descartado por género: ${event.nombre_evento}`);
+              return false;
+          }
       }
 
-      // Validación de sexo 
-      if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== user.sexo) {
-        return false;
-      }
+        // Validación de sexo
+        if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== user.sexo) {
+            console.log(`Evento descartado por sexo: ${event.nombre_evento}`);
+            return false;
+        }
 
-      return true;
+        console.log(`Evento permitido: ${event.nombre_evento}`);
+        return true;
     });
-  };
+};
+
 
   const handlePostular = async (eventoId) => {
     try {
