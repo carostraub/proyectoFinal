@@ -37,4 +37,12 @@ h5 {
   color: white; 
   font-weight: bold; 
 }
+.btn-borrar {
+  background-color: #ffff66;
+  color: #000330;
+}
+.btn-borrar:hover {
+  background-color: #000330;
+  color: #ffff66;
+}
 

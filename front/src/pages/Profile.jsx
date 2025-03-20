@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { useAuth } from "../context/AuthContext";
 
+
+
 const Profile = () => {
   const { user, updateBio } = useAuth(); // Obtener el usuario y la nueva función updateBio
   const [bio, setBio] = useState(user?.biography || ""); // Estado local para la biografía

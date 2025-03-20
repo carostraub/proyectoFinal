@@ -57,7 +57,8 @@ class User(db.Model):
         """ evitar problemas en relaciones """
         return {
             "id": self.id,
-            "nombre": self.nombre
+            "nombre": self.nombre,
+            "edad": self.edad
         }
     
     def serialize_complete(self):
@@ -119,7 +120,7 @@ class Evento(db.Model):
             "nombre_evento": self.nombre_evento,
             "ubicacion": self.ubicacion,
             "fecha": self.fecha.strftime("%d/%m/%Y"),  # Día/Mes/Año
-            "hora": self.hora.strftime("%H:%M:%S"),  # Convertir hora a string
+            "hora": self.hora.strftime("%H:%M"),  # Convertir hora a string
             "dinero": self.dinero,
             "organizador": self.organizador_user.serialize_basic() if self.organizador_user else None,
             "category": self.categoria.titulo if self.categoria else None,

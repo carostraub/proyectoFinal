@@ -2,8 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 import { baseURL } from "../../config/";
 
+
+
 const MyEvents = () => {
   const { user } = useAuth();
+
   const [events, setEvents] = useState([]);
   const [selectedEvent, setSelectedEvent] = useState(null);
 
@@ -57,10 +60,19 @@ const MyEvents = () => {
       const data = await response.json();
       if (response.ok) {
         alert(`Usuario ${action.toLowerCase()} con éxito`);
-        setSelectedEvent((prevEvent) => ({
-          ...prevEvent,
-          participantes: prevEvent.participantes.filter((p) => p.id !== userId),
-        }));
+        setSelectedEvent((prevEvent) => {
+          const updatedParticipantes = prevEvent.participantes.filter((p) => p.id !== userId);
+          const updatedParticipantesList =
+            action === "PARTICIPANTE"
+              ? [...(prevEvent.participantesList || []), prevEvent.participantes.find((p) => p.id === userId)]
+              : prevEvent.participantesList || [];
+
+          return {
+            ...prevEvent,
+            participantes: updatedParticipantes,
+            participantesList: updatedParticipantesList,
+          };
+        });
       } else {
         console.error("Error al gestionar postulante:", data.error);
       }
@@ -68,6 +80,7 @@ const MyEvents = () => {
       console.error("Error en la solicitud:", error);
     }
   };
+
 
   const handleDeleteEvent = async (eventId) => {
     const confirmDelete = window.confirm(
@@ -142,33 +155,49 @@ const MyEvents = () => {
               {selectedEvent.participantes && selectedEvent.participantes.length > 0 ? (
                 selectedEvent.participantes.map((postulant) => (
                   <div key={postulant.id} className="card text-center p-3 mb-3">
-                    <h5>{postulant.nombre}</h5>
+                    <h5>
+                      {postulant.nombre}
+                    </h5>
                     <p>Edad: {postulant.edad}</p>
-                    <button
-                      className="btn btn-success btn-sm me-2"
-                      onClick={() =>
-                        handlePostulantAction(selectedEvent.id, postulant.id, "PARTICIPANTE")
-                      }
-                    >
-                      Aceptar
-                    </button>
-                    <button
-                      className="btn btn-danger btn-sm"
-                      onClick={() =>
-                        handlePostulantAction(selectedEvent.id, postulant.id, "RECHAZADO")
-                      }
-                    >
-                      Rechazar
-                    </button>
+                    <div className="d-flex justify-content-center">
+                      <button
+                        className="btn btn-custom w-50"
+                        onClick={() =>
+                          handlePostulantAction(selectedEvent.id, postulant.id, "PARTICIPANTE")
+                        }
+                      >
+                        Aceptar
+                      </button>
+                      <button
+                        className="btn btn-borrar w-50"
+                        onClick={() =>
+                          handlePostulantAction(selectedEvent.id, postulant.id, "RECHAZADO")
+                        }
+                      >
+                        Rechazar
+                      </button>
+                    </div>
                   </div>
                 ))
               ) : (
                 <p className="text-muted">No hay postulantes aún.</p>
               )}
 
+              <h4 className="mt-4">Participantes</h4>
+              {selectedEvent.participantesList && selectedEvent.participantesList.length > 0 ? (
+                selectedEvent.participantesList.map((participante) => (
+                  <div key={participante.id} className="card text-center p-3 mb-3">
+                    <h5>{participante.nombre}</h5>
+                  </div>
+                ))
+              ) : (
+                <p className="text-muted">No hay participantes aún.</p>
+              )}
+
+
               <div className="text-center mt-4">
                 <button
-                  className="btn btn-danger"
+                  className="btn btn-borrar w-25"
                   onClick={() => handleDeleteEvent(selectedEvent.id)}
                 >
                   Eliminar Evento
