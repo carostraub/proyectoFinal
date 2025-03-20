@@ -67,10 +67,10 @@ const Search = () => {
         console.log("Género permitido en el evento:", event.genero_permitido, "Tipo:", typeof event.genero_permitido);
         console.log("Género del usuario:", user.genero);
 
-        const generosPermitidos = event.genero_permitido.split(",");
+        let generosPermitidos = event.genero_permitido.split(',').map(g => g.trim().replace(/"/g, ""));
         console.log("Array de géneros permitidos:", generosPermitidos);
 
-        if (generosPermitidos.length > 0 && !generosPermitidos.includes("No importa") && !generosPermitidos.includes(user.genero)) {
+        if (!generosPermitidos.includes("No importa") && !generosPermitidos.includes(user.genero)) {
             console.log(`Evento descartado por género: ${event.nombre_evento}`);
             return false;
         }
@@ -79,15 +79,18 @@ const Search = () => {
         console.log("Validación de sexo");
         console.log("Sexo permitido en el evento:", event.sexo_permitido);
         console.log("Sexo del usuario:", user.sexo);
-        if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== user.sexo) {
+
+        // Interpretación de "Mixto" en front-end
+        if (event.sexo_permitido !== "No importa" && event.sexo_permitido !== "Mixto" && event.sexo_permitido !== user.sexo) {
             console.log(`Evento descartado por sexo: ${event.nombre_evento}`);
             return false;
         }
 
-        console.log(`Evento permitido: ${event.nombre_evento}`);
+        console.log(` Evento permitido: ${event.nombre_evento}`);
         return true;
     });
 };
+
 
 
 

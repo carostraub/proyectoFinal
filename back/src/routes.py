@@ -103,7 +103,7 @@ def login():
 
 
 @api.route('/evento', methods=['POST'])
-@cross_origin()
+@cross_origin(origins="http://localhost:5173", supports_credentials=True)
 @jwt_required()
 def crear_evento():
     current_user_id = int(get_jwt_identity())
@@ -125,6 +125,10 @@ def crear_evento():
     sexo_permitido = data.get("sex", "No importa")
     genero_permitido = data.get("gender", "No importa")
 
+    #  Interpretación de "Mixto"
+    if sexo_permitido == "Mixto":
+        sexo_permitido = "No importa"
+
     # Procesamiento del género permitido
     if isinstance(genero_permitido, list):
         genero_permitido_str = ",".join(genero_permitido)
@@ -133,6 +137,7 @@ def crear_evento():
     else:
         genero_permitido_str = str(genero_permitido)
 
+    print("Sexo permitido procesado:", sexo_permitido)
     print("Género permitido procesado:", genero_permitido_str)
 
     if edad_min and edad_max and edad_min > edad_max:
@@ -163,7 +168,7 @@ def crear_evento():
         edad_min=edad_min,
         edad_max=edad_max,
         sexo_permitido=sexo_permitido,
-        genero_permitido=genero_permitido_str  # Almacenar como string limpio
+        genero_permitido=genero_permitido_str
     )
 
     try:
@@ -172,6 +177,8 @@ def crear_evento():
         return jsonify(nuevo_evento.serialize()), 200
     except Exception as e:
         return jsonify({"error": "Error al crear el evento", "detalle": str(e)}), 500
+
+
 
 
 
