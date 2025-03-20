@@ -82,6 +82,10 @@ const MyEvents = () => {
   };
 
 
+
+
+
+
   const handleDeleteEvent = async (eventId) => {
     const confirmDelete = window.confirm(
       "¿Estás seguro de que quieres eliminar este evento?"
@@ -155,9 +159,7 @@ const MyEvents = () => {
               {selectedEvent.participantes && selectedEvent.participantes.length > 0 ? (
                 selectedEvent.participantes.map((postulant) => (
                   <div key={postulant.id} className="card text-center p-3 mb-3">
-                    <h5>
-                      {postulant.nombre}
-                    </h5>
+                    <h5>{postulant.nombre}</h5>
                     <p>Edad: {postulant.edad}</p>
                     <div className="d-flex justify-content-center">
                       <button
@@ -193,6 +195,7 @@ const MyEvents = () => {
               ) : (
                 <p className="text-muted">No hay participantes aún.</p>
               )}
+
 
 
               <div className="text-center mt-4">

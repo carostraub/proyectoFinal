@@ -430,7 +430,17 @@ def gestionar_postulacion(evento_id, user_id):
     db.session.execute(stmt)
     db.session.commit()
 
-    return jsonify({"message": f"El usuario ha sido {nuevo_estatus} en el evento"}), 200
+    # Obtener el evento actualizado
+    evento_actualizado = Evento.query.get(evento_id)
+    participantes = db.session.query(participantes_table).filter_by(id_evento=evento_id, estatus=Estatus.PARTICIPANTE).all()
+    participantes_list = [{"id": p.id_usuario, "nombre": User.query.get(p.id_usuario).nombre} for p in participantes]
+
+    # Serializar el evento
+    evento_data = evento_actualizado.serialize()
+    evento_data["participantesList"] = participantes_list
+
+    return jsonify({"message": f"El usuario ha sido {nuevo_estatus} en el evento", "evento": evento_data}), 200
+
 
 
 
