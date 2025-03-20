@@ -6,7 +6,7 @@ import { baseURL } from "../../config/index";
 
 const CreateSport = () => {
   const { user } = useAuth();
-// const navigate = useNavigate();
+  // const navigate = useNavigate();
   const sports = [
     "Ajedrez",
     "Atletismo",
@@ -47,10 +47,8 @@ const CreateSport = () => {
     description: "",
     sex: "",
     gender: [],
-    ageRange: {
-      edadMin: 16,
-      edadMax: 50
-    },
+    edadMin: 16,
+    edadMax: 50
   });
 
   const handleChange = (e) => {
@@ -67,11 +65,11 @@ const CreateSport = () => {
       alert("Por favor, completa todos los campos antes de continuar.");
       return;
     } else {
-      console.log("Formulario enviado con éxito:", formData);
+      // console.log("Formulario enviado con éxito:", formData);
       try {
         // guardar formulario 
         let token = localStorage.getItem("access_token")
-        console.log(token)
+
         const response = await fetch(`${baseURL}/api/evento`, {
           method: "POST",
           headers: {
@@ -81,7 +79,6 @@ const CreateSport = () => {
           body: JSON.stringify(formData),
           mode: 'cors' //  Esto hace que el request use CORS
         });
-        console.log(response)
         if (response.ok) {
           alert("Evento creado de forma exitosa! 🎉");
         } else {
@@ -96,7 +93,9 @@ const CreateSport = () => {
   const handleAgeRangeChange = ({ edadMin, edadMax }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ageRange: [{ edadMin, edadMax }]
+      // ageRange: [{ edadMin, edadMax }]
+      edadMin: edadMin,
+      edadMax: edadMax
     }));
   };
 
@@ -115,7 +114,7 @@ const CreateSport = () => {
   };
 
   const isFormComplete = () => {
-    const { nameSport, nameEvent, location, time, date, missingPeople, payment, description, sex, gender, ageRange } = formData;
+    const { nameSport, nameEvent, location, time, date, missingPeople, payment, description, sex, gender, edadMax, edadMin } = formData;
 
     // Verificar que los campos de texto no estén vacíos
     if (!nameSport || !nameEvent || !location || !time || !date || !description || !sex) {
@@ -133,7 +132,7 @@ const CreateSport = () => {
     }
 
     // Verificar que el rango de edad sea válido
-    if (ageRange.edadMin <= 16 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) {
+    if (edadMin <= 16 || edadMax <= 0 || edadMin > edadMax) {
       return false;
     }
 
