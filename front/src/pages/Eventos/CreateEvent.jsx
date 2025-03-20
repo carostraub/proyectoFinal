@@ -19,10 +19,8 @@ const CreateEvent = () => {
     description: "",
     sex: "",
     gender: [],
-    ageRange: {
-      edadMin: 16,
-      edadMax: 50
-    },
+    edadMin: 16,
+    edadMax: 50
   });
 
   const handleChange = (e) => {
@@ -47,7 +45,8 @@ const CreateEvent = () => {
   const handleAgeRangeChange = ({ edadMin, edadMax }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ageRange: { edadMin, edadMax } 
+      edadMax:edadMax,
+      edadMin:edadMin 
     }));
   };
 
@@ -84,12 +83,12 @@ const CreateEvent = () => {
   };
 
   const isFormComplete = () => {
-    const { nameEvent, location, time, date, missingPeople, description, sex, gender, ageRange } = formData;
+    const { nameEvent, location, time, date, missingPeople, description, sex, gender, edadMax,edadMin } = formData;
 
     if (!nameEvent || !location || !time || !date || !description || !sex) return false;
     if (missingPeople <= 0) return false;
     if (!gender.length) return false;
-    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) return false;
+    if (edadMin <= 0 || edadMax <= 0 || edadMin > edadMax) return false;
 
     return true;
   };

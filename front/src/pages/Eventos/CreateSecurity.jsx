@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useAuth } from "../../../src/context/AuthContext";
 import AgeRange from "../../components/AgeRange";
+import { baseURL } from "../../config/index";
 
 const CreateSecurity = () => {
   const { user } = useAuth();
@@ -8,6 +9,7 @@ const CreateSecurity = () => {
   const [formData, setFormData] = useState({
     category: 3, // Categoría de seguridad
     nameEvent: "",
+    location: "",
     locationFrom: "",
     locationTo: "",
     time: "",
@@ -17,7 +19,8 @@ const CreateSecurity = () => {
     description: "",
     sex: "",
     gender: [],
-    ageRange: { edadMin: 16, edadMax: 50 }
+    edadMin: 16,
+    edadMax: 50
   });
 
   const handleChange = (e) => {
@@ -42,7 +45,8 @@ const CreateSecurity = () => {
   const handleAgeRangeChange = ({ edadMin, edadMax }) => {
     setFormData((prevFormData) => ({
       ...prevFormData,
-      ageRange: { edadMin, edadMax }
+      edadMax: edadMax,
+      edadMin: edadMin
     }));
   };
 
@@ -52,17 +56,23 @@ const CreateSecurity = () => {
       alert("Por favor, completa todos los campos antes de continuar.");
       return;
     }
-  
+
     let token = localStorage.getItem("access_token");
     console.log("Token obtenido:", token); // 🔍 Verifica si el token existe
-  
+
     if (!token) {
       alert("No tienes un token válido. Intenta iniciar sesión nuevamente.");
       return;
     }
-  
+
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      location: "salida: " + locationFrom + " llegada: " + locationTo,
+
+    }));
+
     try {
-      const response = await fetch("http://localhost:5000/api/evento", {
+      const response = await fetch(`${baseURL}/api/evento`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -70,9 +80,9 @@ const CreateSecurity = () => {
         },
         body: JSON.stringify(formData)
       });
-  
+
       const data = await response.json();
-  
+
       if (response.ok) {
         alert("Evento creado con éxito!");
       } else {
@@ -82,15 +92,15 @@ const CreateSecurity = () => {
       console.log("Error en la solicitud:", error);
     }
   };
-  
+
 
   const isFormComplete = () => {
-    const { nameEvent, locationFrom, locationTo, time, date, missingPeople, description, sex, gender, ageRange } = formData;
+    const { nameEvent, locationFrom, locationTo, time, date, missingPeople, description, sex, gender, edadMax, edadMin } = formData;
 
     if (!nameEvent || !locationFrom || !locationTo || !time || !date || !description || !sex) return false;
     if (missingPeople <= 0) return false;
     if (!gender.length) return false;
-    if (ageRange.edadMin <= 0 || ageRange.edadMax <= 0 || ageRange.edadMin > ageRange.edadMax) return false;
+    if (edadMin <= 0 || edadMax <= 0 || edadMin > edadMax) return false;
 
     return true;
   };
@@ -126,7 +136,7 @@ const CreateSecurity = () => {
                 <label className="form-label">¿Cuántas personas faltan?</label>
                 <div className="d-flex justify-content-center">
 
-                <input type="number" className="form-control" name="missingPeople" value={formData.missingPeople} onChange={handleChange} style={{ width: "5rem" }} />
+                  <input type="number" className="form-control" name="missingPeople" value={formData.missingPeople} onChange={handleChange} style={{ width: "5rem" }} />
                 </div>
               </div>
 
@@ -147,7 +157,7 @@ const CreateSecurity = () => {
 
         {/* Filtros */}
         <div className="col">
-        <h1 className="text-center">Filtros</h1>
+          <h1 className="text-center">Filtros</h1>
           <h5 className="mt-4 text-center">Sexo</h5>
           <div className="d-flex justify-content-center">
             {["Masculino", "Femenino", "Mixto"].map((sex) => (

@@ -120,8 +120,8 @@ def crear_evento():
             return jsonify({"error": f"Falta el campo requerido: {field}"}), 400
 
     # Validaciones de edad, sexo y género
-    edad_min = data.get("ageRange", {}).get("edadMin")
-    edad_max = data.get("ageRange", {}).get("edadMax")
+    edad_min = data.get("edadMin")
+    edad_max = data.get("edadMax")
     sexo_permitido = data.get("sex", "No importa")
     genero_permitido = data.get("gender", "No importa")
 
